@@ -104,7 +104,7 @@ analytics:
 author:
   name             : "Ju Seon"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : ""
+  bio              : " "
   location         : "Republic of Korea"
   email            :
   links:
