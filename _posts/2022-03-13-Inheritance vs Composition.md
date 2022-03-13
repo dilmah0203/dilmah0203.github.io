@@ -88,7 +88,7 @@ CoffeeToastSet클래스는 할인 금액을 뺀 원래의 금액을 계산하기
     }
 }
   ```
-만약, 잔수에 따른 할인율이 다르다면 Coffee클래스와 CoffeToastSet클래스도 변경되어야 할 것이다. 
+만약, 잔 수를 고려해야  Coffee클래스와 CoffeToastSet클래스도 변경되어야 할 것이다. 
 
 
 **조합이란**
