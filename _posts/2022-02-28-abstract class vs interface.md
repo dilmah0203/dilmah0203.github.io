@@ -13,12 +13,14 @@ excerpt : ""
 - static이나 final메소드 선언이 가능하며, 다중상속은 불가능하다.
 
 ```java
-public abstract class 클래스이름{
+public abstract class 클래스이름 {
+
     //필드 선언
     //추상메소드
     public abstract void a();
+
     //일반메소드
-    public void b(){
+    public void b() {
 
     }
 }
@@ -33,8 +35,11 @@ public abstract class 클래스이름{
 **Example**
 
 ```java
-public class Rectangle{
-    public void a(){};
+public class Rectangle {
+
+    public void a() {
+    }
+   
 }
 
 public static void main(String[] args){
@@ -46,36 +51,40 @@ public static void main(String[] args){
 main 클래스에서 다음과 같이 객체를 생성했다. 객체는 생성 이후 Rectangle 클래스에 선언된 모든 메소드를 사용할 수 있게 된다. 하지만 이것은 전적으로 Rectangle 객체에 의존하는 코드이다. 만약, 이것과 유사한 다른 클래스를 구현해야 한다면 다음과 같이 만들 수 있다.
 
 ```java
-public abstract class Shape{
+public abstract class Shape {
+
     abstract void draw();
+
     abstract double area();
 }
 
-public class Rectangle extends Shape{
+public class Rectangle extends Shape {
+
     private double width;
     private double height;
 
-    public void Rectangle(double width, double height){
+    public void Rectangle(double width, double height) {
         this.width = width;
         this.height = height;
     }
 
     @Override
-    public void draw(){
+    public void draw() {
         System.out.println("Draw");
     }
 
     @Override
-    public double area(){
+    public double area() {
         return this.width * this.height;
     }
 }
 
-public class Main{
-    public static void main(String[] args){
-        Shape shape = new Rectangle(5,3);
+public class Main {
+
+    public static void main(String[] args) {
+        Shape shape = new Rectangle(5, 3);
         shape.draw(); //Shape 클래스에 의존적임
-        System.out.println("area :"+shape.area());
+        System.out.println("area :" + shape.area());
     }
 }
 ```
@@ -91,7 +100,7 @@ public class Main{
 - 다중 상속이 가능하다.
 
 ```java
-public interface 인터페이스이름{
+public interface 인터페이스이름 {
     //상수 필드
     //메소드
 }
@@ -107,23 +116,28 @@ public interface 인터페이스이름{
 
 ```java
 public class A {
-    void auto(I i){
+
+    void auto(I i) {
         i.method();
     }
 }
 
+
 public interface I {
+
     public abstract void method();
 }
 
-public class B implements I{
+public class B implements I {
+
     @Override
     public void method() {
         System.out.println("method in B class");
     }
 }
 
-public class C implements I{
+public class C implements I {
+
     @Override
     public void method() {
         System.out.println("method in C class");
@@ -131,7 +145,8 @@ public class C implements I{
 }
 
 public class Main {
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         A a = new A();
         a.auto(new B()); //method in B class
         a.auto(new C()); //method in C class
@@ -153,31 +168,37 @@ public class Main {
    기존 코드에 영향을 주지 않고 새로운 메소드를 가질 수 있도록 이전 인터페이스에 대한 호환성을 제공한다.
 
 ```java
-public interface Calculator{
+public interface Calculator {
+
     final int first = 10; //상수 필드
+
     public int plus(int x, int y); //메소드
+
     public int minus(int x, int y);
-    default int multiply(int x, int y){
+
+    default int multiply(int x, int y) {
         return x * y;
     }
 }
 
-public class A implements Calculator{
+public class A implements Calculator {
+
     @Override
-    public int plus(int x, int y){
-        return x+y;
+    public int plus(int x, int y) {
+        return x + y;
     }
 
     @Override
-    public int minus(int x, int y){
-        return x-y;
+    public int minus(int x, int y) {
+        return x - y;
     }
 }
 
-public class Main{
-    public static void main(String[] args){
+public class Main {
+
+    public static void main(String[] args) {
         Calculator calc = new A();
-        int value = calc.multiply(2,3);
+        int value = calc.multiply(2, 3);
         System.out.println(value); //6
     }
 }
@@ -191,29 +212,35 @@ public class Main{
    간단한 기능을 가지는 유틸리티성 인터페이스를 만들 때 사용할 수 있다.
 
 ```java
-public interface Calculator{
+public interface Calculator {
+
     final int first = 10; //상수 필드
+
     public int plus(int x, int y); //메소드
+
     public int minus(int x, int y);
-    static int multiply(int x, int y){
+
+    static int multiply(int x, int y) {
         return x * y;
     }
 }
 
-public class A implements Calculator{
+public class A implements Calculator {
+
     @Override
-    public int plus(int x, int y){
-        return x+y;
+    public int plus(int x, int y) {
+        return x + y;
     }
 
     @Override
-    public int minus(int x, int y){
-        return x-y;
+    public int minus(int x, int y) {
+        return x - y;
     }
 }
 
-public class Main{
-    public static void main(String[] args){
+public class Main {
+
+    public static void main(String[] args) {
         int value = Calculator.multiply(5, 3);
         System.out.println((value));
     }
