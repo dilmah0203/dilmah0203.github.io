@@ -20,23 +20,26 @@ excerpt : ""
 
 
 ```java
-public class Bevarage {
-    private int price;   
-    
-    public Bevarage(int price){ //생성자
+public class Beverage {
+
+    private int price;
+
+    public Beverage(int price) { //생성자
         this.price = price;
     }
 
-    public int calculatePrice(){
+    public int calculatePrice() {
         return price;
     }
 }
 
-public class Coffee extends Bevarage {
-    public Coffee(int price){
+public class Coffee extends Beverage {
+
+    public Coffee(int price) {
         super(price);
     }
 }
+
 
 ```
 <br>
@@ -45,23 +48,26 @@ public class Coffee extends Bevarage {
 이를 구현하기 위해 Coffee클래스에 discountPrice() 메소드를 추가한다.
 
 ```java
-public class Coffee extends Bevarage {
-    public Coffee(int price){
+public class Coffee extends Beverage {
+
+    public Coffee(int price) {
         super(price);
     }
-    public int discountPrice(){
+
+    public int discountPrice() {
         return 1000;
     }
 }
 
 
-public class CoffeeToastSet extends Coffee{
-    public CoffeeToastSet(int price){
+public class CoffeeToastSet extends Coffee {
+
+    public CoffeeToastSet(int price) {
         super(price);
     }
 
     @Override
-    public int calculatePrice(){
+    public int calculatePrice() {
         return super.calculatePrice() - super.discountPrice();
     }
 }
@@ -76,11 +82,12 @@ CoffeeToastSet클래스는 할인 금액을 뺀 원래의 금액을 계산하기
 
 
 ```java
-public class Bevarage {
+public class Beverage {
+
     //중복된 부분 생략
-    private int count; 
-    
-    public int getCount(){
+    private int count;
+
+    public int getCount() {
         return count;
     }
 }
@@ -96,36 +103,44 @@ public class Bevarage {
 
  ```java
 public class Job {
+
     private int salary;
-    
-    public int getSalary(){
+
+    public int getSalary() {
         return salary;
     }
-    public void setSalary(int salary){
+
+    public void setSalary(int salary) {
         this.salary = salary;
     }
 }
 
-public class Person {
-    private Job job; //기존 클래스가 새로운 클래스의 구성요소가 된다
 
-    public Person(){
+public class Person {
+
+    private Job job;
+
+    public Person() {
         this.job = new Job();
         job.setSalary(1000);
     }
-    public int getSalary(){
+
+    public int getSalary() {
         return job.getSalary();
     }
 }
 
+
 public class Test {
+
     public static void main(String[] args) {
         Person person = new Person();
         int salary = person.getSalary();
 
-        System.out.println("Salary : "+salary);
+        System.out.println("Salary : " + salary);
     }
 }
+
 
 ```
 Person 객체를 사용하여 급여(salary)를 받는다. 위 코드는 Job 객체의 변경에 영향을 받지 않는다. 
