@@ -26,7 +26,7 @@ excerpt : ""
 public class Beverage {
     private int price;   
     
-    public Beverage(int price){ //생성자
+    public Beverage(int price){ 
         this.price = price;
     }
 
@@ -40,7 +40,6 @@ public class Coffee extends Beverage {
         super(price);
     }
 }
-
 ```
 <br>
 
