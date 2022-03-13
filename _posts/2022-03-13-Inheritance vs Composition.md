@@ -141,7 +141,6 @@ Person 객체를 사용하여 급여(salary)를 받는다. 위 코드는 Job 객
 
 
 참고 <br>
-[https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html)
 
 [https://www.journaldev.com/1325/composition-in-java-example](https://www.journaldev.com/1325/composition-in-java-example)
 
