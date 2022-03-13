@@ -23,10 +23,10 @@ excerpt : ""
 예시를 통하여 살펴보자.
 
 ```java
-public class Bevarage {
+public class Beverage {
     private int price;   
     
-    public Bevarage(int price){ //생성자
+    public Beearage(int price){ //생성자
         this.price = price;
     }
 
@@ -35,7 +35,7 @@ public class Bevarage {
     }
 }
 
-public class Coffee extends Bevarage {
+public class Coffee extends Beverage {
     public Coffee(int price){
         super(price);
     }
@@ -48,7 +48,7 @@ public class Coffee extends Bevarage {
 이를 구현하기 위해 Coffee클래스에 discountPrice() 메소드를 추가한다.
 
 ```java
-public class Coffee extends Bevarage {
+public class Coffee extends Beverage {
     public Coffee(int price){
         super(price);
     }
@@ -80,7 +80,7 @@ CoffeeToastSet클래스는 할인 금액을 뺀 원래의 금액을 계산하기
 
 
   ```java
-  public class Bevarage {
+  public class Beverage {
     //중복된 부분 생략
     private int count; 
     
