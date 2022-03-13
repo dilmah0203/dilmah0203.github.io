@@ -26,7 +26,7 @@ excerpt : ""
 public class Beverage {
     private int price;   
     
-    public Beearage(int price){ //생성자
+    public Beverage(int price){ //생성자
         this.price = price;
     }
 
