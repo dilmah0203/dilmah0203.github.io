@@ -97,5 +97,6 @@ CoffeeToastSet클래스는 할인 금액을 뺀 원래의 금액을 계산하기
 
 
 
-참고
-https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html
+참고 <br>
+[https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html)
+[https://mangkyu.tistory.com/199](https://mangkyu.tistory.com/199)
