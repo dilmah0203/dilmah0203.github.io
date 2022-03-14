@@ -158,4 +158,4 @@ Person 객체를 사용하여 급여(salary)를 받는다. 위 코드는 Job 객
 
 [https://www.journaldev.com/1325/composition-in-java-example](https://www.journaldev.com/1325/composition-in-java-example)
 
-[https://mangkyu.tistory.com/199](https://mangkyu.tistory.com/199)
+
