@@ -83,7 +83,7 @@ public class Main {
 
     public static void main(String[] args) {
         Shape shape = new Rectangle(5, 3);
-        shape.draw(); //Shape 클래스에 의존적임
+        shape.draw(); 
         System.out.println("area :" + shape.area());
     }
 }
