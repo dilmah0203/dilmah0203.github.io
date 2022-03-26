@@ -142,13 +142,18 @@ public class Example {
     }
 
 }
-public static void main(String[] args){
-   Example ex = new Example();
-    ex.a());
-}
+
+public class Main{
+  public static void main(String[] args){
+    Example ex = new Example();
+    public void b() {
+      ex.a());
+    }
+  }
+ }
 ```
 
-main 클래스에서 다음과 같이 객체를 생성했다. 객체는 생성 이후 Example클래스에 선언된 모든 메소드를 사용할 수 있게 된다. 하지만 이것은 전적으로 Example 객체에 의존하는 코드이다.
+main 클래스에서 다음과 같이 객체를 생성했다. 객체는 생성 이후 Example클래스에 선언된 모든 메소드를 사용할 수 있게 된다. 하지만 이것은 Example 클래스와 Main클래스가 강한 결합을 이루고 있다고 볼 수 있다.
 
 ```java
 public class Example {
@@ -175,8 +180,7 @@ public class Car2 implements Movable {
         System.out.println("method in Car2 class");
     }
 }
-public class
- Main {
+public class Main {
     public static void main(String[] args) {
         Example e = new Example();
         e.auto(new Car()); //method in Car class
