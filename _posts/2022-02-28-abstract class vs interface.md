@@ -138,13 +138,18 @@ public interface 인터페이스이름 {
 
 ```java
 public class Car {
-  public void method() {
-  }
+
+    public void method() {
+        System.out.println("car method");
+    }
 }
   
 public class Main {
-  Car car = new Car();
-  car.method();
+
+    public static void main(String[] args) {
+        Car car = new Car();
+        car.method();
+    }
 }
 ```
 
@@ -156,13 +161,16 @@ public class Example {
     void auto(Movable m) {
         m.method();
     }
+
 }
 
 public interface Movable {
+
     public void method();
 }
 
 public class Car implements Movable {
+
     @Override
     public void method() {
         System.out.println("method in Car class");
@@ -170,18 +178,22 @@ public class Car implements Movable {
 }
 
 public class Bus implements Movable {
+
     @Override
     public void method() {
         System.out.println("method in Bus class");
     }
 }
+
 public class Main {
+
     public static void main(String[] args) {
-       Example e = new Example();
-       e.auto(new Car()); //
-       e.auto(new Bus()); //
+        Example e = new Example();
+        e.auto(new Car()); //method in Car class
+        e.auto(new Bus()); //method in Bus class
     }
 }
+
 ```
 
 Movable 인터페이스를 상속받은 Car과 Bus클래스에 다른 동작을 선언하고 이 동작을 사용하는 Main 클래스에서는 객체만 바꿔주면 되기 때문에 다른 클래스에 영향을 미치지 않고 독립적인 프로그래밍이 가능해진다. 인터페이스를 통해 간접적인 관계를 맺음으로써 서로에게 영향을 주지 않는다.
@@ -198,30 +210,40 @@ Movable 인터페이스를 상속받은 Car과 Bus클래스에 다른 동작을 
 
 ```java
 public interface Calculator {
+
     final int first = 10; //상수 필드
+
     public int plus(int x, int y); //메소드
+
     public int minus(int x, int y);
+
     default int multiply(int x, int y) {
         return x * y;
     }
 }
-public class A implements Calculator {
+
+public class Example implements Calculator {
+
     @Override
     public int plus(int x, int y) {
         return x + y;
     }
+
     @Override
     public int minus(int x, int y) {
         return x - y;
     }
 }
+
 public class Main {
+
     public static void main(String[] args) {
-        Calculator calc = new A();
+        Calculator calc = new Example();
         int value = calc.multiply(2, 3);
         System.out.println(value); //6
     }
 }
+
 ```
 
 <br>
@@ -234,23 +256,31 @@ public class Main {
 
 ```java
 public interface Calculator {
+
     final int first = 10; //상수 필드
+
     public int plus(int x, int y); //메소드
+
     public int minus(int x, int y);
+
     static int multiply(int x, int y) {
         return x * y;
     }
 }
-public class A implements Calculator {
+
+public class Ex implements Calculator {
+
     @Override
     public int plus(int x, int y) {
         return x + y;
     }
+
     @Override
     public int minus(int x, int y) {
         return x - y;
     }
 }
+
 public class Main {
     public static void main(String[] args) {
         int value = Calculator.multiply(5, 3);
