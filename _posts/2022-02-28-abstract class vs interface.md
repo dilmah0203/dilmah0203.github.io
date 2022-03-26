@@ -38,7 +38,6 @@ public abstract class 클래스이름 {
 
 - non-static, non-final 필드 선언을 통해 각 인스턴스에서 상태 변경을 위한 메소드 선언이 가능하다
 
-<br>
 
 ```java
 public abstract class Shape {
