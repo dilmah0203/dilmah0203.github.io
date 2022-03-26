@@ -32,8 +32,8 @@ public abstract class 클래스이름 {
 **언제 사용할까?**
 
 - 여러 하위 클래스의 공통 기능을 캡슐화할 때
-
 - 상태 변경을 위해 non-static, non-final 필드 선언이 필요할 때
+- 
 
 
 ```java
