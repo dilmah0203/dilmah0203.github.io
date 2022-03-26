@@ -111,7 +111,7 @@ public class Triangle extends Shape {
 }
 ```
 
-Rectangle과 Triangle 클래스는 Shape 클래스를 확장한다. 이 클래스들 간의 관계를 Is A 라고 할 수 있으며 또한 int x를 추상 클래스에 선언함으로써 **상태에 관여**할 수 있다는 것이 인터페이스와의 큰 차이점이다.
+Rectangle과 Triangle 클래스는 Shape 클래스를 확장한다. 이 클래스들 간의 관계를 Is A 라고 하며 결합도가 높다. int x를 추상 클래스에 선언함으로써 **상태에 관여**할 수 있다는 것이 인터페이스와의 큰 차이점이다.
 
 <br>
 
@@ -137,23 +137,18 @@ public interface 인터페이스이름 {
 다음 예시를 보자.
 
 ```java
-public class Example {
-    public void a() {
-    }
-
-}
-
-public class Main{
-  public static void main(String[] args){
-    Example ex = new Example();
-    public void b() {
-      ex.a());
-    }
+public class Car {
+  public void method() {
   }
- }
+}
+  
+public class Main {
+  Car car = new Car();
+  car.method();
+}
 ```
 
-main 클래스에서 다음과 같이 객체를 생성했다. 객체는 생성 이후 Example클래스에 선언된 모든 메소드를 사용할 수 있게 된다. 하지만 이것은 Example 클래스와 Main클래스가 강한 결합을 이루고 있다고 볼 수 있다.
+Main 클래스에서 다음과 같이 객체를 생성했다. 객체는 생성 이후 Car클래스에 선언된 모든 메소드를 사용할 수 있게 된다. 이것은 Car클래스와 Main클래스가 강한 결합을 이루고 있다고 볼 수 있으며 인터페이스를 이용하여 다음과 같이 바꿀 수 있다.
 
 ```java
 public class Example {
@@ -164,7 +159,7 @@ public class Example {
 }
 
 public interface Movable {
-    public abstract void method();
+    public void method();
 }
 
 public class Car implements Movable {
@@ -174,23 +169,22 @@ public class Car implements Movable {
     }
 }
 
-public class Car2 implements Movable {
+public class Bus implements Movable {
     @Override
     public void method() {
-        System.out.println("method in Car2 class");
+        System.out.println("method in Bus class");
     }
 }
 public class Main {
     public static void main(String[] args) {
-        Example e = new Example();
-        e.auto(new Car()); //method in Car class
-        e.auto(new Car2()); //method in Car2 class
+       Example e = new Example();
+       e.auto(new Car()); //
+       e.auto(new Bus()); //
     }
 }
 ```
 
-Movable 인터페이스를 상속받은 Car과 Car2 클래스에 다른 동작을 선언하고 이 동작을 사용하는 Main 클래스에서는 객체만 바꿔주면 되기 때문에 다른 클래스에 영향을 미치지 않고 독립적인 프로그래밍이 가능해진다.
-클래스 Example은 클래스 Car와 Car2의 메소드를 호출한다. 하지만 인터페이스를 통해 간접적인 관계를 맺음으로써 서로에게 영향을 주지 않는다.
+Movable 인터페이스를 상속받은 Car과 Bus클래스에 다른 동작을 선언하고 이 동작을 사용하는 Main 클래스에서는 객체만 바꿔주면 되기 때문에 다른 클래스에 영향을 미치지 않고 독립적인 프로그래밍이 가능해진다. 인터페이스를 통해 간접적인 관계를 맺음으로써 서로에게 영향을 주지 않는다.
 
 <br>
 
