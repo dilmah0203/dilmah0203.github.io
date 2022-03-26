@@ -1,57 +1,82 @@
 ---
 layout: single
-title : "**추상클래스와 인터페이스는 어떻게 구분하여 써야할까?**"
-excerpt : ""
+title: "**추상클래스와 인터페이스는 어떻게 구분하여 써야할까?**"
+excerpt: ""
 ---
 
 <br>
 
+**추상클래스 vs 인터페이스**
+
+- 추상클래스와 인터페이스는 인스턴스화 하는 것은 불가능하며,
+
+- 구현부가 있는 메소드와 없는 메소드를 모두 가질 수 있다는 점에서 유사하다.
+
+- 인터페이스에서 모든 변수는 기본적으로 public static final 이며, 모든 메소드는 public abstract인 반면 추상클래스는 static이나 final이 아닌 필드를 지정할 수 있고 public, protected, private 메소드를 가질 수 있다.
+
+- 인터페이스는 다른 여러개의 인터페이스들을 함께 구현할 수 있지만 추상클래스는 상속을 통해 구현되는데 자바는 다중 상속을 지원하지 않으므로 추상클래스를 상속받은 자식클래스는 다른 클래스를 상속받을 수 없다.
+
+<br>
 
 **추상클래스**
 
-- 추상클래스는 abstract로 선언된 메소드가 하나라도 있을 때 선언하며, 인터페이스와 달리 구현되어 있는 메소드가 있어도 상관 없다.
-- static이나 final메소드 선언이 가능하며, 다중상속은 불가능하다.
-
 ```java
 public abstract class 클래스이름 {
-
     //필드 선언
     //추상메소드
     public abstract void a();
-
     //일반메소드
     public void b() {
-
     }
 }
 ```
+<br>
 
 **언제 사용할까?**
 
-- 여러 하위 클래스의 공통 기능을 캡슐화할 때 사용
-- public이외의 접근지정자를 사용하고 싶을 때(protected 또는 private)
-- non-static 이나 non-final 필드를 선언하고 싶을 때
+- 여러 하위 클래스의 공통 기능을 캡슐화할 때
 
-**Example**
+- non-static, non-final 필드 선언을 통해 각 인스턴스에서 상태 변경을 위한 메소드 선언이 가능하다
 
-```java
-public class Rectangle {
-
-    public void a() {
-    }
-   
-}
-
-public static void main(String[] args){
-    Rectangle rec = new Rectangle():
-    rec.a();
-}
-```
-
-main 클래스에서 다음과 같이 객체를 생성했다. 객체는 생성 이후 Rectangle 클래스에 선언된 모든 메소드를 사용할 수 있게 된다. 하지만 이것은 전적으로 Rectangle 객체에 의존하는 코드이다. 만약, 이것과 유사한 다른 클래스를 구현해야 한다면 다음과 같이 만들 수 있다.
+<br>
 
 ```java
 public abstract class Shape {
+    abstract void draw();
+    abstract double area();
+}
+
+public class Rectangle extends Shape {
+    @Override
+    public void draw() {
+        ...
+    }
+    @Override
+    public double area() {
+        ...
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Shape shape = new Rectangle();
+        shape.draw();
+        System.out.println("area :" + shape.area());
+    }
+}
+```
+
+위의 코드는 Rectangle 객체를 생성했지만 상위 타입인 Shape로 객체 참조가 된다. 따라서, 메소드 호출 시 Shape 클래스의 메소드만 사용이 가능해진다. Rectangle과 유사한 다른 클래스를 사용하고 싶을 때에는 객체를 생성하도록 변경해주기만 하면 이후의 코드들은 전혀 수정될 필요가 없다.
+
+다음 예시를 보자.
+
+```java
+public abstract class Shape {
+    int x;
+
+    public Shape(int x) {
+        this.x = x;
+    }
 
     abstract void draw();
 
@@ -59,45 +84,39 @@ public abstract class Shape {
 }
 
 public class Rectangle extends Shape {
-
-    private double width;
-    private double height;
-
-    public void Rectangle(double width, double height) {
-        this.width = width;
-        this.height = height;
+     public Rectangle(int x){
+        super(x);
     }
-
     @Override
     public void draw() {
-        System.out.println("Draw");
+        ...
     }
-
     @Override
     public double area() {
-        return this.width * this.height;
+        ...
     }
 }
 
-public class Main {
-
-    public static void main(String[] args) {
-        Shape shape = new Rectangle(5, 3);
-        shape.draw(); 
-        System.out.println("area :" + shape.area());
+public class Triangle extends Shape {
+    public Triangle(int x){
+        super(x);
+    }
+    @Override
+    public void draw() {
+         ...
+    }
+    @Override
+    public double area() {
+         ...
     }
 }
 ```
 
-위의 코드는 동일하게 Rectangle 객체를 생성했지만 상위 타입인 shape로 객체 참조가 된다. 따라서, 메소드 호출 시 Shape 클래스의 메소드만 사용이 가능해진다. Rectangle과 유사한 다른 클래스를 사용하고 싶을 때에는 객체를 생성하도록 변경해주기만 하면 이후의 코드들은 전혀 수정될 필요가 없다.
+Rectangle과 Triangle 클래스는 Shape 클래스를 확장한다. 이 클래스들 간의 관계를 Is A 라고 할 수 있으며 또한 int x를 추상 클래스에 선언함으로써 **상태에 관여**할 수 있다는 것이 인터페이스와의 큰 차이점이다.
 
 <br>
 
 **인터페이스**
-
-- 모든 멤버 변수는 public static final 이어야 하며, 생략이 가능하다.
-- 모든 메소드는 public abstract 이어야 하며, 생략이 가능하다.
-- 다중 상속이 가능하다.
 
 ```java
 public interface 인터페이스이름 {
@@ -106,96 +125,101 @@ public interface 인터페이스이름 {
 }
 ```
 
+<br>
+
 **언제 사용할까?**
 
-- 관련 없는 클래스들이 인터페이스를 구현할 때
-- 특정 데이터 타입의 행동을 명시하고싶은데, 어디서 구현되는지 알 필요 없는 경우
+- 구현 클래스들 간에 관련성이 없는 경우
+- 특정 데이터 타입의 행동을 명시하고싶은데, 어디서 구현되는지 상관 없는 경우
 - 다중상속을 활용할 때
 
-**Example**
+<br>
+
+다음 예시를 보자.
 
 ```java
-public class A {
+public class Example {
+    public void a() {
+    }
 
-    void auto(I i) {
-        i.method();
+}
+public static void main(String[] args){
+   Example ex = new Example();
+    ex.a());
+}
+```
+
+main 클래스에서 다음과 같이 객체를 생성했다. 객체는 생성 이후 Example클래스에 선언된 모든 메소드를 사용할 수 있게 된다. 하지만 이것은 전적으로 Example 객체에 의존하는 코드이다.
+
+```java
+
+public class Example {
+
+    void auto(Movable m) {
+        m.method();
     }
 }
 
-
-public interface I {
-
+public interface Movable {
     public abstract void method();
 }
 
-public class B implements I {
-
+public class Car implements Movable {
     @Override
     public void method() {
         System.out.println("method in B class");
     }
 }
 
-public class C implements I {
-
+public class Car2 implements Movable {
     @Override
     public void method() {
         System.out.println("method in C class");
     }
 }
-
-public class Main {
-
+public class
+ Main {
     public static void main(String[] args) {
-        A a = new A();
-        a.auto(new B()); //method in B class
-        a.auto(new C()); //method in C class
+        Example e = new Example();
+        e.auto(new Car()); //method in Car class
+        e.auto(new Car2()); //method in Car2 class
     }
 }
 ```
 
-클래스 A는 클래스 B와 C의 메소드를 호출한다. 하지만 인터페이스를 통해 간접적인 관계를 맺음으로써 서로에게 영향을 주지 않는다.
-하나의 클래스가 변경되더라도 다른 클래스에 영향을 미치지 않고 독립적으로 프로그래밍이 가능하다.
+Movable 인터페이스를 상속받은 Car과 Car2 클래스에 다른 동작을 선언하고 이 동작을 사용하는 Main 클래스에서는 객체만 바꿔주면 되기 때문에 다른 클래스에 영향을 미치지 않고 독립적인 프로그래밍이 가능해진다.
+클래스 Example은 클래스 Car와 Car2의 메소드를 호출한다. 하지만 인터페이스를 통해 간접적인 관계를 맺음으로써 서로에게 영향을 주지 않는다.
 
 <br>
 
 **JDK 8의 인터페이스에 추가된 기능**
 
-- default method 
+- default method
 
-   JDK 8 이전엔 인터페이스에서 구현을 정의할 수 없었다. 그래서 새로운 메소드를 추가하려면 인터페이스를 구현하는 모든 클래스들이 해당 메소드를 구현해야했다.
-   하지만 default method로 추가가 가능해지면서 기존 인터페이스를 구현했던 클래스에서 메소드를 override하지 않아도 된다.
-   기존 코드에 영향을 주지 않고 새로운 메소드를 가질 수 있도록 이전 인터페이스에 대한 호환성을 제공한다.
+  JDK 8 이전엔 인터페이스에서 구현을 정의할 수 없었다. 그래서 새로운 메소드를 추가하려면 인터페이스를 구현하는 모든 클래스들이 해당 메소드를 구현해야했다.
+  하지만 default method로 추가가 가능해지면서 기존 인터페이스를 구현했던 클래스에서 메소드를 override하지 않아도 된다.
+  기존 코드에 영향을 주지 않고 새로운 메소드를 가질 수 있도록 이전 인터페이스에 대한 호환성을 제공한다.
 
 ```java
 public interface Calculator {
-
     final int first = 10; //상수 필드
-
     public int plus(int x, int y); //메소드
-
     public int minus(int x, int y);
-
     default int multiply(int x, int y) {
         return x * y;
     }
 }
-
 public class A implements Calculator {
-
     @Override
     public int plus(int x, int y) {
         return x + y;
     }
-
     @Override
     public int minus(int x, int y) {
         return x - y;
     }
 }
-
 public class Main {
-
     public static void main(String[] args) {
         Calculator calc = new A();
         int value = calc.multiply(2, 3);
@@ -203,51 +227,43 @@ public class Main {
     }
 }
 ```
+
 <br>
 
-- static method 
+- static method
 
-   객체 생성 여부와 상관없이 사용이 가능하며, override가 불가능하고 상속되지 않는다.
-   상수를 선언할 때는 static block에서 초기화할 수 없고, 선언과 동시에 초기화해야한다.
-   간단한 기능을 가지는 유틸리티성 인터페이스를 만들 때 사용할 수 있다.
+  객체 생성 여부와 상관없이 사용이 가능하며, override가 불가능하고 상속되지 않는다.
+  상수를 선언할 때는 static block에서 초기화할 수 없고, 선언과 동시에 초기화해야한다.
+  간단한 기능을 가지는 유틸리티성 인터페이스를 만들 때 사용할 수 있다.
 
 ```java
 public interface Calculator {
-
     final int first = 10; //상수 필드
-
     public int plus(int x, int y); //메소드
-
     public int minus(int x, int y);
-
     static int multiply(int x, int y) {
         return x * y;
     }
 }
-
 public class A implements Calculator {
-
     @Override
     public int plus(int x, int y) {
         return x + y;
     }
-
     @Override
     public int minus(int x, int y) {
         return x - y;
     }
 }
-
 public class Main {
-
     public static void main(String[] args) {
         int value = Calculator.multiply(5, 3);
         System.out.println((value));
     }
 }
 ```
-<br>
 
+<br>
 
 **정리**
 
