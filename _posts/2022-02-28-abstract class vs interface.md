@@ -151,7 +151,6 @@ public static void main(String[] args){
 main 클래스에서 다음과 같이 객체를 생성했다. 객체는 생성 이후 Example클래스에 선언된 모든 메소드를 사용할 수 있게 된다. 하지만 이것은 전적으로 Example 객체에 의존하는 코드이다.
 
 ```java
-
 public class Example {
 
     void auto(Movable m) {
