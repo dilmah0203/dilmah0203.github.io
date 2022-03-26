@@ -165,14 +165,14 @@ public interface Movable {
 public class Car implements Movable {
     @Override
     public void method() {
-        System.out.println("method in B class");
+        System.out.println("method in Car class");
     }
 }
 
 public class Car2 implements Movable {
     @Override
     public void method() {
-        System.out.println("method in C class");
+        System.out.println("method in Car2 class");
     }
 }
 public class
