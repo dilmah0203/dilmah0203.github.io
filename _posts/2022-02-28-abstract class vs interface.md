@@ -24,9 +24,9 @@ excerpt: ""
 public abstract class 클래스이름 {
     //필드 선언
     //추상메소드
-    public abstract void a();
+    public abstract void method();
     //일반메소드
-    public void b() {
+    public void method2() {
     }
 }
 ```
@@ -41,15 +41,19 @@ public abstract class 클래스이름 {
 
 ```java
 public abstract class Shape {
+
     abstract void draw();
+
     abstract double area();
 }
 
 public class Rectangle extends Shape {
+
     @Override
     public void draw() {
         ...
     }
+
     @Override
     public double area() {
         ...
@@ -57,6 +61,7 @@ public class Rectangle extends Shape {
 }
 
 public class Main {
+
     public static void main(String[] args) {
         Shape shape = new Rectangle();
         shape.draw();
@@ -71,6 +76,7 @@ public class Main {
 
 ```java
 public abstract class Shape {
+
     int x;
 
     public Shape(int x) {
@@ -83,13 +89,16 @@ public abstract class Shape {
 }
 
 public class Rectangle extends Shape {
-     public Rectangle(int x){
+
+    public Rectangle(int x) {
         super(x);
     }
+
     @Override
     public void draw() {
         ...
     }
+
     @Override
     public double area() {
         ...
@@ -97,18 +106,22 @@ public class Rectangle extends Shape {
 }
 
 public class Triangle extends Shape {
-    public Triangle(int x){
+
+    public Triangle(int x) {
         super(x);
     }
+
     @Override
     public void draw() {
          ...
     }
+
     @Override
     public double area() {
          ...
     }
 }
+
 ```
 
 Rectangle과 Triangle 클래스는 Shape 클래스를 확장한다. 이 클래스들 간의 관계를 Is A 라고 하며 결합도가 높다. int x를 추상 클래스에 선언함으로써 **상태에 관여**할 수 있다는 것이 인터페이스와의 큰 차이점이다.
