@@ -17,67 +17,43 @@ excerpt: ""
 
 **추상클래스**
 
+추상 메소드는 아래와 같이 구현부가 없는 메소드를 말하며, 어떤 클래스가 추상 메소드를 포함한다면 추상 클래스로 선언되어야 한다.
+
+```java
+public abstract void method();
+```
+
+추상클래스를 상속받는 클래스는 부모클래스에 있는 모든 추상메소드들을 구현한다. 그렇지 않은 경우 해당 서브클래스 또한 abstract로 선언되어야 한다.
+
 ```java
 public abstract class 클래스이름 {
     //필드 선언
     //추상메소드
-    public abstract void method();
     //일반메소드
-    public void method2() {
+    public void move() {
     }
 }
 ```
+
+인터페이스의 경우 default 또는 static으로 선언되지 않은 메소드는 abstract이기 때문에 생략이 가능하다.
+
 <br>
 
 **언제 사용할까?**
 
 - 여러 하위 클래스의 공통 기능을 캡슐화할 때
+- public 이 아닌 공통적인 필드나 메소드를 가지는 클래스를 상속받고자 할 때 
 - 상태 변경을 위해 non-static, non-final 필드 선언이 필요할 때
-- 
 
-
-```java
-public abstract class Shape {
-
-    abstract void draw();
-
-    abstract double area();
-}
-
-public class Rectangle extends Shape {
-
-    @Override
-    public void draw() {
-        ...
-    }
-
-    @Override
-    public double area() {
-        ...
-    }
-}
-
-public class Main {
-
-    public static void main(String[] args) {
-        Shape shape = new Rectangle();
-        shape.draw();
-        System.out.println("area :" + shape.area());
-    }
-}
-```
-
-위의 코드는 Rectangle 객체를 생성했지만 상위 타입인 Shape로 객체 참조가 된다. 따라서, 메소드 호출 시 Shape 클래스의 메소드만 사용이 가능해진다. Rectangle과 유사한 다른 클래스를 사용하고 싶을 때에는 객체를 생성하도록 변경해주기만 하면 이후의 코드들은 전혀 수정될 필요가 없다.
-
-다음 예시를 보자.
+다음 예시를 보자. 
 
 ```java
 public abstract class Shape {
 
     int x;
-
-    public Shape(int x) {
-        this.x = x;
+    
+    public void move() {
+       ...
     }
 
     abstract void draw();
@@ -86,10 +62,6 @@ public abstract class Shape {
 }
 
 public class Rectangle extends Shape {
-
-    public Rectangle(int x) {
-        super(x);
-    }
 
     @Override
     public void draw() {
@@ -104,10 +76,6 @@ public class Rectangle extends Shape {
 
 public class Triangle extends Shape {
 
-    public Triangle(int x) {
-        super(x);
-    }
-
     @Override
     public void draw() {
          ...
@@ -121,7 +89,8 @@ public class Triangle extends Shape {
 
 ```
 
-Rectangle과 Triangle 클래스는 Shape 클래스를 확장한다. 이 클래스들 간의 관계를 Is A 라고 하며 결합도가 높다. int x를 추상 클래스에 선언함으로써 **상태에 관여**할 수 있다는 것이 인터페이스와의 큰 차이점이다.
+추상 클래스는 Is a 관계일 때 사용하며 Rectangle과 Triangle 클래스는 Shape 클래스를 확장한다. draw()와 area()를 추상클래스를 상속받는 Rectangle과 Triangle클래스가 오버라이딩하도록 함으로써 동작 변경이 가능하다. 또한 Shape클래스에서 int x를 선언함으로써 **상태에 관여**할 수 있다는 것이 인터페이스와의 큰 차이점이다. 
+
 
 <br>
 
@@ -163,7 +132,7 @@ public class Main {
 }
 ```
 
-Main 클래스에서 다음과 같이 객체를 생성했다. 객체는 생성 이후 Car클래스에 선언된 모든 메소드를 사용할 수 있게 된다. 이것은 Car클래스와 Main클래스가 강한 결합을 이루고 있다고 볼 수 있으며 인터페이스를 이용하여 다음과 같이 바꿀 수 있다.
+Main 클래스에서 다음과 같이 객체를 생성했다. 객체는 생성 이후 Car클래스에 선언된 모든 메소드를 사용할 수 있게 된다. Main 클래스에서 다른 객체를 사용하고 싶을 때 main메소드에서 새로운 객체로 변경해주어야 한다. 이것은 Car클래스와 Main클래스가 강한 결합을 이루고 있다고 볼 수 있으며 인터페이스를 이용하여 다음과 같이 결합도를 낮출 수 있다.
 
 ```java
 public class Example {
@@ -206,7 +175,7 @@ public class Main {
 
 ```
 
-Movable 인터페이스를 상속받은 Car과 Bus클래스에 다른 동작을 선언하고 이 동작을 사용하는 Main 클래스에서는 객체만 바꿔주면 되기 때문에 다른 클래스에 영향을 미치지 않고 독립적인 프로그래밍이 가능해진다. 인터페이스를 통해 간접적인 관계를 맺음으로써 서로에게 영향을 주지 않는다.
+Movable 인터페이스를 상속받은 Car과 Bus클래스에 다른 동작을 선언하고 이 동작을 사용하는 Main 클래스에서는 다른 객체를 사용할 시 Movable을 구현하는 객체를 생성하고 바꿔주기만 하면 된다. 
 
 <br>
 
@@ -262,8 +231,7 @@ public class Main {
 
   객체 생성 여부와 상관없이 사용이 가능하며, override가 불가능하고 상속되지 않는다.
   상수를 선언할 때는 static block에서 초기화할 수 없고, 선언과 동시에 초기화해야한다.
-  간단한 기능을 가지는 유틸리티성 인터페이스를 만들 때 사용할 수 있다.
-
+  
 ```java
 public interface Calculator {
 
@@ -303,11 +271,8 @@ public class Main {
 
 **정리**
 
-추상클래스와 인터페이스는 추상메소드를 사용하고, 객체 생성이 불가능하다.
-
-**추상클래스**는 추상메소드를 포함하는 것을 제외하면 일반 클래스와 다르지 않다. 추상클래스를 상속 받음으로써 자식 클래스들 간의 공통 기능을 구현하고 확장시킨다. 추상클래스는 is ~A(~이다) 이고, 여러 클래스들의 공통점을 찾아 추상화 시켜서 사용하는 것이 개발에서 이득일 때 사용한다.
-
-**인터페이스**는 추상클래스보다 추상화 정도가 강해 몸통이 있는 일반 메소드나 멤버변수를 가질 수 없다. 추상 메소드를 정의해놓고 구현하는 클래스에서 각 기능들을 override하여 여러가지 형태로 구현할 수 있다. 상속을 받아 기능을 확장시키는 것이 목적인 추상클래스와는 달리, 구현 객체가 같은 동작을 한다는 것을 보장하기 위한 목적으로 사용한다.
+추상클래스는 접근제한자에 제약 없이 객체의 상태 변경과 메소드 오버라이딩을 통한 공통 기능을 구현하고 확장시킬 때 사용하며, 
+인터페이스는 추상클래스보다 추상화 정도가 강하여 동작 변경만 가능하다는 점에서 결합도를 낮추는 것을 도와준다.
 
 <br>
 
