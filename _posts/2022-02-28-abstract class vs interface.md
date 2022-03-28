@@ -89,7 +89,7 @@ public class Triangle extends Shape {
 
 ```
 
-추상 클래스는 Is a 관계일 때 사용하며 Rectangle과 Triangle 클래스는 Shape 클래스를 확장한다. draw()와 area()를 추상클래스를 상속받는 Rectangle과 Triangle클래스가 오버라이딩하도록 함으로써 동작 변경이 가능하다. 또한 Shape클래스에서 int x를 선언함으로써 **상태에 관여**할 수 있다는 것이 인터페이스와의 큰 차이점이다. 
+추상 클래스는 **Is a** 관계일 때 사용하며 Rectangle과 Triangle 클래스는 Shape 클래스를 확장한다. draw()와 area() 메소드 추상클래스를 상속받는 Rectangle과 Triangle클래스가 오버라이딩하도록 함으로써 동작 변경이 가능하다. 또한 Shape클래스에서 int x를 선언함으로써 **상태에 관여**할 수 있다는 것이 인터페이스와의 큰 차이점이다. 
 
 
 <br>
