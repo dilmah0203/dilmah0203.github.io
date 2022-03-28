@@ -53,7 +53,7 @@ public abstract class Shape {
     int x;
     
     public void move() {
-       ...
+        ...
     }
 
     abstract void draw();
@@ -78,12 +78,12 @@ public class Triangle extends Shape {
 
     @Override
     public void draw() {
-         ...
+        ...
     }
 
     @Override
     public double area() {
-         ...
+        ...
     }
 }
 
