@@ -4,161 +4,54 @@ title : "**상속과 조합**"
 excerpt : ""
 ---
 
-<br>
+## 상속(Inheritance)과 조합(Composition)
 
-**상속을 사용하는 이유**
+**상속의 목적**
 
-- 기존 클래스의 필드와 메소드를 재사용함으로써 코드가 간결해진다
-- 유지보수가 쉬워지며 개발시간이 단축된다
+- 중복코드 제거와 기능확장을 할 수 있다.
+- 클래스들의 계층적인 구조를 만들 수 있다.
 
-<br>
+### 상속의 문제
 
-**상속의 단점**
+1. **캡슐화가 깨지고 결합도가 높아진다**
 
-**캡슐화를 깨트리고 결합도가 높아진다**
+객체지향 프로그래밍에서는 결합도는 낮고 응집도는 높을수록 좋다. 하지만 상속을 이용하면 캡슐화는 깨지고 결합도는 높아진다. 이유는 상속은 상위 클래스와 강하게 의존하기 때문에 상위 클래스의 구현이 바뀌면 이 클래스를 상속받은 하위클래스에도 영향을 미치기 때문이다. 
 
-객체지향 프로그래밍에서는 결합도는 낮고 응집도는 높을수록 좋다. 하지만 상속을 이용하면 캡슐화는 깨지고 결합도는 높아진다. 이유는  상위 클래스의 구현이 바뀌면 이 클래스를 상속받은   하위클래스에도 영향을 미치기 때문이다.
-따라서 변화에 유연하게 대처하기 어려워진다.
+2. **상위 클래스의 public 메소드가 하위 클래스에도 노출된다**
 
+상속은 부모 클래스와 강하게 의존하기 때문에 부모 클래스의 캡슐화를 해치고 결합도가 높아진다. 부모 클래스의 구현을 변경하면, 많은 자식 클래스를 모두 변경 해줘야 하기 때문이다. 불필요한 메소드도 상속받는 문제도 있다.
 
-```java
-public class Beverage {
+![img](https://github.com/dilmah0203/TIL/blob/main/Image/Stack.png)
 
-    private int price;
+이 Stack 클래스는 Vector라는 클래스를 상속받고 있다.
 
-    public Beverage(int price) { //생성자
-        this.price = price;
-    }
+![img2](https://github.com/dilmah0203/TIL/blob/main/Image/StackTest.png) 
 
-    public int calculatePrice() {
-        return price;
-    }
-}
+문자열을 저장하는 Stack을 선언 후 Stack에서 지원하는 메소드로 문자열을 넣어주었다. Stack에서 문자열을 꺼내면 마지막에 넣은 문자열이 반환될 것이라고 예상할 수 있다. 하지만 실제 실행 결과는 예상과 다르게 두 번째에 넣은 문자열이 반환된다.
 
-public class Coffee extends Beverage {
+![img3](https://github.com/dilmah0203/TIL/blob/main/Image/StackTestFailed.png)
 
-    public Coffee(int price) {
-        super(price);
-    }
-}
+add() 메소드는 Stack의 규칙을 따르지 않기 때문이다. 원래 Stack은 나중에 들어온 원소부터 먼저 반환되어야 하는데 add() 메소드는 순서와 상관없이 특정 인덱스에 원소를 추가할 수 있게 허용하고 있다. Vector를 상속한 Stack은 자신에게 필요하지 않은 메소드를 노출할 수 밖에 없다.
 
+### 조합은 상속의 문제점을 어떻게 해결할까?
 
-```
-<br>
+조합이란,
 
-커피와 토스트라는 세트 메뉴를 추가해야하며, 커피가 제공될 경우에는 할인이 되어야 하는 상황이라고 가정하자. 
-이를 구현하기 위해 Coffee클래스에 discountPrice() 메소드를 추가한다.
+- 기존 클래스의 인스턴스를 새로운 클래스의 private 필드로 참조하고 메소드를 호출하는 방식으로 구현한다. 
+- public 인터페이스에 의존해서 부분 객체의 내부 구현이 변경되어도 비교적 안전하다.
+- 상속과 달리 부분 객체의 내부 구현이 공개되지 않는다.
 
-```java
-public class Coffee extends Beverage {
+### 상속과 조합은 언제 써야할까?
 
-    public Coffee(int price) {
-        super(price);
-    }
+**상속의 목적**
 
-    public int discountPrice() {
-        return 1000;
-    }
-}
+1. 서브타이핑 - 다형적인 계층구조 구현(부모와 자식 행동이 호환)
+2. 서브클래싱 - 다른 클래스의 코드를 재사용(부모와 자식 행동이 호환 x)
+
+이 두가지의 서로 다른 상속의 차이는 부모 클래스의 행동과 자식 클래스의 행동의 호환여부이다. 두 객체가 서로 Is-A 관계이거나 클라이언트 관점에서 두 객체가 동일한 행동을 할 것이라 기대될 때 상속을 고려한다.
+
+**상속**이 **Is-A** 관계라면 **조합**은 **Has-A** 관계이다. 객체가 변경되더라도 영향을 최소화할 수 있기 때문에 변경에 안정적이며 느슨하게 결합되므로 설계가 유연해진다.
 
 
-public class CoffeeToastSet extends Coffee {
-
-    public CoffeeToastSet(int price) {
-        super(price);
-    }
-
-    @Override
-    public int calculatePrice() {
-        return super.calculatePrice() - super.discountPrice();
-    }
-}
-
-```
-CoffeeToastSet클래스는 할인 금액을 뺀 원래의 금액을 계산하기 위해 Coffee 클래스에서 discountPrice()를 제공해야 함을 알고 있어야 한다. 즉, 상속을 위해서는 부모 클래스의 내부 구조를 잘 알고있어야 한다. 따라서 부모 클래스는 자식 클래스에게 노출되어 캡슐화가 약해지고 두 클래스는 강하게 결합되어 부모 클래스가 변경될 때 자식클래스도 변경될 가능성이 높아진다.
-
-<br>
-
-**유연성 및 확장성이 떨어진다**
-
-예를들어, 부모 클래스인 Beverage 클래스에 음료의 잔 수를 반환하는 새로운 메소드를 추가해야하는 상황이라고 가정하자. 이를 위해 새로운 변수를 추가하게 된다. 만약, 잔수에 따른 할인율이 다르다면 Coffee클래스와 CoffeToastSet클래스도 변경되어야 할 것이다. 
-
-
-```java
-public class Beverage {
-
-    //중복된 부분 생략
-    private int count;
-
-    public int getCount() {
-        return count;
-    }
-}
-```
-
-
-<br>
-
-**조합이란**
-
-상속은 is-a 관계라면 조합은 has-a 관계다. 객체가 변경되더라도 영향을 최소화할 수 있기 때문에 변경에 안정적이며 구현을 효과적으로 캡슐화할 수 있다. 상속은 클래스를 통해 강하게 결합되지만 합성은 느슨하게 결합되므로 설계가 유연해진다.
-
-
- ```java
-public class Job {
-
-    private int salary;
-
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-}
-
-
-public class Person {
-
-    private Job job;
-
-    public Person() {
-        this.job = new Job();
-        job.setSalary(1000);
-    }
-
-    public int getSalary() {
-        return job.getSalary();
-    }
-}
-
-
-public class Test {
-
-    public static void main(String[] args) {
-        Person person = new Person();
-        int salary = person.getSalary();
-
-        System.out.println("Salary : " + salary);
-    }
-}
-
-
-```
-Person 객체를 사용하여 급여(salary)를 받는다. 위 코드는 Job 객체의 변경에 영향을 받지 않는다. 
-
-<br>
-
-정리
-
-상속은 컴파일 시점에 부모와 자식 클래스가 강하게 결합되는 반면, 조합은 느슨한 결합으로 코드 재사용을 위해서는 조합을 사용하는 것이 설계에 있어서 유연하다.
-
-
-<br>
-
-참고 <br>
-
-[https://www.journaldev.com/1325/composition-in-java-example](https://www.journaldev.com/1325/composition-in-java-example)
 
 
