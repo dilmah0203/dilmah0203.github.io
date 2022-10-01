@@ -1,10 +1,8 @@
 ---
 layout: single
-title : "**상속과 조합**"
+title : 상속(Inheritance)과 조합(Composition)
 excerpt : ""
 ---
-
-## 상속(Inheritance)과 조합(Composition)
 
 상속이란,
 
