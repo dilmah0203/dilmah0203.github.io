@@ -18,17 +18,17 @@ excerpt : ""
 
 ### 2. 상위 클래스의 public 메소드가 하위 클래스에도 노출된다
 
-상속은 부모 클래스와 강하게 의존하기 때문에 부모 클래스의 캡슐화를 해치고 결합도가 높아진다. 부모 클래스의 구현을 변경하면, 많은 자식 클래스를 모두 변경 해줘야 하기 때문이다. 불필요한 메소드도 상속받는 문제가 있다.
+상속은 부모 클래스와 강하게 의존하기 때문에 부모 클래스의 캡슐화를 해치고 결합도가 높아진다. 부모 클래스의 구현을 변경하면, 많은 자식 클래스를 모두 변경 해줘야 하기 때문이다. 불필요한 메소드도 상속받는 문제가 있다. 
+
+아래의 Stack 클래스는 Vector 클래스를 상속받고 있다.
 
 ![Stack](https://user-images.githubusercontent.com/96303344/193419142-b7c466f7-3e35-4ee2-8972-dff427cd0c33.png)
 
-이 Stack 클래스는 Vector라는 클래스를 상속받고 있다.
-
-![StackTest](https://user-images.githubusercontent.com/96303344/193419302-91699b7e-07bd-4bd1-82f4-12a494ce3a25.png)
+![StackTest](https://user-images.githubusercontent.com/96303344/193466990-ade3ffee-bdc5-42fb-809f-32fbf25df7f1.png)
 
 문자열을 저장하는 Stack을 선언 후 Stack에서 지원하는 메소드로 문자열을 넣어주었다. Stack에서 문자열을 꺼내면 마지막에 넣은 문자열이 반환될 것이라고 예상할 수 있다. 하지만 실제 실행 결과는 예상과 다르게 두 번째에 넣은 문자열이 반환된다.
 
-![StackTestFailed](https://user-images.githubusercontent.com/96303344/193419314-eda8024c-6ade-4b45-811f-21a585932bc4.png)
+![StackTest2](https://user-images.githubusercontent.com/96303344/193466997-33d8a228-6f13-4d4f-a932-5bd63d395863.png)
 
 add() 메소드는 Stack의 규칙을 따르지 않기 때문이다. 원래 Stack은 나중에 들어온 원소부터 먼저 반환되어야 하는데 add() 메소드는 순서와 상관없이 특정 인덱스에 원소를 추가할 수 있게 허용하고 있다. Vector를 상속한 Stack은 자신에게 필요하지 않은 메소드를 노출할 수 밖에 없다.
 
