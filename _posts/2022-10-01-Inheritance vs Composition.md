@@ -88,7 +88,6 @@ public class WinningLotto extends Lotto {
   
 즉, `Lotto` 클래스를 상속한 하위 클래스가 몇 개가 있든 상위 클래스의 변화로 인해 하위 클래스를 변경해주어야 한다. 이처럼 상속은 하위 클래스가 상위 클래스에 강하게 의존, 결합하기 때문에 변화에 유연하게 대처하기 어려워진다.
   
-  
 2. **상위 클래스의 public 메소드가 하위 클래스에도 노출된다.**
 
 상속은 부모 클래스와 강하게 의존하기 때문에 부모 클래스의 캡슐화를 해치고 결합도가 높아진다. 부모 클래스의 구현을 변경하면, 많은 자식 클래스를 모두 변경 해줘야 하기 때문이다. 불필요한 메소드도 상속받는 문제가 있다.
@@ -97,7 +96,7 @@ public class WinningLotto extends Lotto {
 
 Stack 클래스는 Vector 클래스를 상속받고 있다.
 
-![img2](https://github.com/dilmah0203/TIL/blob/main/Image/StackTest.png) 
+![img2](https://github.com/dilmah0203/TIL/blob/main/Image/StackTest.png?raw=true) 
 
 문자열을 저장하는 Stack을 선언 후 Stack에서 지원하는 메소드로 문자열을 넣어주었다. Stack에서 문자열을 꺼내면 마지막에 넣은 문자열이 반환될 것이라고 예상할 수 있다. 하지만 실제 실행 결과는 예상과 다르게 두 번째에 넣은 문자열이 반환된다.
 
@@ -136,7 +135,7 @@ public class WinningLotto {
 
 이 두가지의 서로 다른 **상속**의 차이는 부모 클래스의 행동과 자식 클래스의 행동의 호환여부이다. 두 객체가 서로 **Is-A** 관계이거나 클라이언트 관점에서 두 객체가 동일한 행동을 할 것이라 기대될 때 상속을 고려한다.
 
-![img4](https://github.com/dilmah0203/TIL/blob/main/Image/Inheritance.png)
+![img4](https://github.com/dilmah0203/TIL/blob/main/Image/Inheritance.png?raw=true)
   
 위처럼 Is-A 관계일 때 상속을 고려한다. 포유류가 동물이라는 사실은 변할 가능성이 거의 없고, 포유류가 숨을쉬고 새끼를 낳는다는 행동 역시 변할 가능성은 거의 없다. 
 
