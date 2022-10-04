@@ -12,7 +12,7 @@ excerpt : ""
 
 ### 상속의 문제
 
-1. **하위 클래스가 상위 클래스의 구현에 의존하기 때문에 상위 클래스의 변경에 모든 하위 클래스가 영향을 받는다.**
+### 1. 하위 클래스가 상위 클래스의 구현에 의존하기 때문에 상위 클래스의 변경에 모든 하위 클래스가 영향을 받는다.
 
 로또 번호를 가지고 있는 역할인 `Lotto` 클래스가 있다. `Lotto` 클래스는 로또 번호를 `List<Integer>`로 가지고 있다.
 
@@ -88,7 +88,7 @@ public class WinningLotto extends Lotto {
   
 즉, `Lotto` 클래스를 상속한 하위 클래스가 몇 개가 있든 상위 클래스의 변화로 인해 하위 클래스를 변경해주어야 한다. 이처럼 상속은 하위 클래스가 상위 클래스에 강하게 의존, 결합하기 때문에 변화에 유연하게 대처하기 어려워진다.
   
-2. **상위 클래스의 public 메소드가 하위 클래스에도 노출된다.**
+### 2. 상위 클래스의 public 메소드가 하위 클래스에도 노출된다.
 
 상속은 부모 클래스와 강하게 의존하기 때문에 부모 클래스의 캡슐화를 해치고 결합도가 높아진다. 부모 클래스의 구현을 변경하면, 많은 자식 클래스를 모두 변경 해줘야 하기 때문이다. 불필요한 메소드도 상속받는 문제가 있다.
 
@@ -159,7 +159,4 @@ public class 포유류 extends 동물 {
 [우아한Tech 상속과 조합](https://www.youtube.com/watch?v=U4OSS4jJ9ns)
   
 [https://tecoble.techcourse.co.kr/post/2020-05-18-inheritance-vs-composition/](https://tecoble.techcourse.co.kr/post/2020-05-18-inheritance-vs-composition/)  
-
-
-
 
