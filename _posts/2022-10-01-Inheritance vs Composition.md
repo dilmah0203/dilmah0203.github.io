@@ -20,9 +20,11 @@ excerpt : ""
 public class Lotto {
   
     protected List<Integer> lottoNumbers;
+    
     public Lotto(List<Integer> lottoNumbers) {
         this.lottoNumbers = new ArrayList<>(lottoNumbers);
     }
+    
     public boolean contains(Integer integer) {
         return this.lottoNumbers.contains(integer);
     }
@@ -36,10 +38,12 @@ public class Lotto {
 public class WinningLotto extends Lotto {
   
     private final BonusBall bonusBall;
+    
     public WinningLotto(List<Integer> lottoNumbers, BonusBall bonusBall) {
         super(lottoNumbers);
         this.bonusBall = bonusBall;
     }
+    
     public long compare(Lotto lotto) {
         return lottoNumbers.stream()
             .filter(lotto::contains)
@@ -55,9 +59,11 @@ public class WinningLotto extends Lotto {
 public class Lotto {
   
     protected int[] lottoNumbers;
+    
     public Lotto(int[] lottoNumbers) {
         this.lottoNumbers = lottoNumbers;
     }
+    
     public boolean contains(Integer integer) {
         return Arrays.stream(lottoNumbers)
             .anyMatch(lottoNumber -> Objects.equals(lottoNumber, integer));
@@ -72,11 +78,13 @@ public class Lotto {
 public class WinningLotto extends Lotto {
   
     private final BonusBall bonusBall;
+    
     // 오류가 발생한다.
     public WinningLotto(List<Integer> lottoNumbers, BonusBall bonusBall) {
         super(lottoNumbers);
         this.bonusBall = bonusBall;
     }
+    
     // 오류가 발생한다.
     public long compare(Lotto lotto) {
         return lottoNumbers.stream()
@@ -112,6 +120,7 @@ add() 메소드는 Stack의 규칙을 따르지 않기 때문이다. 원래 Stac
 
 ```java
 public class WinningLotto {
+
     private Lotto lotto;
     private BonusBall bonusBall;
 }  
@@ -141,9 +150,11 @@ public class WinningLotto {
 
 ```java
 public class 포유류 extends 동물 {
+
     protected void 숨을쉬다() {
         ...
     }
+    
     protected void 새끼를낳다() {
         ...
     }
