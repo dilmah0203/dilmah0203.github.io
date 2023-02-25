@@ -209,6 +209,8 @@ public class Main {
 }
 ```
 
+default나 static으로 선언된 메소드가 아니면 이는 추상메소드라는 의미로 반드시 재정의를 해주어야 한다. default로 선언된 메소드는 재정의(Override)를 할 수 있고, static은 재정의를 할 수 없다.
+
 <br>
 
 **정리**
