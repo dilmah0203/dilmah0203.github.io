@@ -16,14 +16,18 @@ excerpt: ""
 
 ## 인터페이스
 
+인터페이스의 경우 default 또는 static으로 선언되지 않은 메소드는 모두 abstract이기 때문에 생략이 가능하다.
+
 ```java
 public interface 인터페이스이름 {
+
     //상수 필드
     //메소드
 }
 ```
 
 > 언제 사용할까?
+
 - 관련 없는 클래스가 인터페이스를 구현할 때
 - 특정 데이터 타입의 행동을 명시하고싶은데, 어디서 구현되는지 상관 없는 경우
 - 다중상속을 활용할 때
@@ -32,12 +36,14 @@ public interface 인터페이스이름 {
 
 ```java
 public class Car {
+
     public void method() {
         System.out.println("car method");
     }
 }
   
 public class Main {
+
     public static void main(String[] args) {
     
         Car car = new Car();
@@ -50,26 +56,35 @@ Main 클래스에서 `Car car = new Car();` 과같이 객체를 생성하였다.
 
 ```java
 public class Example {
+
     void auto(Movable m) {
         m.method();
     }
 }
+
 public interface Movable {
+
     public void method();
 }
+
 public class Car implements Movable {
+
     @Override
     public void method() {
         System.out.println("method in Car class");
     }
 }
+
 public class Bus implements Movable {
+
     @Override
     public void method() {
         System.out.println("method in Bus class");
     }
 }
+
 public class Main {
+
     public static void main(String[] args) {
     
         Example e = new Example();
@@ -79,7 +94,7 @@ public class Main {
 }
 ```
 
-Movable 인터페이스를 구현하는 Car과 Bus 클래스는 각각 다른 행동을 정의하였다. Main 클래스는 동작 변경을 위해 Movable 인터페이스를 구현하는 객체를 바꿔주기만 하면 된다. 
+Movable 인터페이스를 구현하는 Car과 Bus 클래스는 각각 다른 동작을 정의하였다. Main 클래스는 동작 변경을 위해 Movable 인터페이스를 구현하는 객체를 바꿔주기만 하면 된다. 
 
 ## 추상클래스
 
@@ -91,6 +106,7 @@ public abstract void method();
 
 ```java
 public abstract class 클래스이름 {
+
     //필드 
     //추상메소드
     
@@ -100,15 +116,15 @@ public abstract class 클래스이름 {
 }
 ```
 
-인터페이스의 경우 default 또는 static으로 선언되지 않은 메소드는 모두 abstract이기 때문에 생략이 가능하다.
-
 > 언제 사용할까?
+
 - 여러 하위 클래스의 공통 기능을 캡슐화할 때
-- public 이 아닌 공통적인 필드나 메소드를 가지는 클래스를 상속받고자 할 때 
+- 접근제한자가 public이 아닌 공통적인 필드나 메소드를 가지는 클래스를 상속받고자 할 때 
 - 상태 변경을 위해 non-static, non-final 필드 선언이 필요할 때
 
 ```java
 public abstract class Shape {
+
     int x;
     
     public void move() {
@@ -118,7 +134,9 @@ public abstract class Shape {
     abstract void draw();
     abstract double area();
 }
+
 public class Rectangle extends Shape {
+
     @Override
     public void draw() {
         ...
@@ -129,7 +147,9 @@ public class Rectangle extends Shape {
         ...
     }
 }
+
 public class Triangle extends Shape {
+
     @Override
     public void draw() {
         ...
@@ -157,6 +177,7 @@ JDK 8 이전엔 새로운 메소드를 추가하려면 인터페이스를 구현
 
 ```java
 public interface Calculator {
+
     static final int first = 10; //상수 필드
     
     public int plus(int x, int y); 
@@ -166,7 +187,9 @@ public interface Calculator {
         return x * y;
     }
 }
+
 public class Example implements Calculator {
+
     @Override
     public int plus(int x, int y) {
         return x + y;
@@ -177,7 +200,9 @@ public class Example implements Calculator {
         return x - y;
     }
 }
+
 public class Main {
+
     public static void main(String[] args) {
     
         Calculator calc = new Example();
@@ -193,6 +218,7 @@ public class Main {
   
 ```java
 public interface Calculator {
+
     static final int first = 10;
     
     public int plus(int x, int y); 
@@ -206,7 +232,7 @@ public interface Calculator {
 
 <br>
 
-**추상클래스**는 객체의 상태 변경과 메소드 오버라이딩을 통한 공통 기능을 구현하고 확장시킬 때 사용하며, **인터페이스**는 상태가 없고 동작 변경을 통해 결합도를 낮추는 것을 도와준다.  
+Java는 추상화를 구현하기 위해 추상클래스와 인터페이스 두가지 기능이 존재한다. **인터페이스**는 상태를 가질 수 없지만 동작 변경을 통해 결합도를 낮추는 것을 도와준다. **추상클래스**는 상태를 가질 수 있고 메소드 오버라이딩을 통한 공통 기능을 구현하고 확장시킬 때 사용한다.
 
 <br>
 
