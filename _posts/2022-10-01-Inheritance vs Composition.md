@@ -20,11 +20,9 @@ excerpt : ""
 public class Lotto {
   
     protected List<Integer> lottoNumbers;
-
     public Lotto(List<Integer> lottoNumbers) {
         this.lottoNumbers = new ArrayList<>(lottoNumbers);
     }
-
     public boolean contains(Integer integer) {
         return this.lottoNumbers.contains(integer);
     }
@@ -38,12 +36,10 @@ public class Lotto {
 public class WinningLotto extends Lotto {
   
     private final BonusBall bonusBall;
-
     public WinningLotto(List<Integer> lottoNumbers, BonusBall bonusBall) {
         super(lottoNumbers);
         this.bonusBall = bonusBall;
     }
-
     public long compare(Lotto lotto) {
         return lottoNumbers.stream()
             .filter(lotto::contains)
@@ -59,11 +55,9 @@ public class WinningLotto extends Lotto {
 public class Lotto {
   
     protected int[] lottoNumbers;
-
     public Lotto(int[] lottoNumbers) {
         this.lottoNumbers = lottoNumbers;
     }
-
     public boolean contains(Integer integer) {
         return Arrays.stream(lottoNumbers)
             .anyMatch(lottoNumber -> Objects.equals(lottoNumber, integer));
@@ -78,13 +72,11 @@ public class Lotto {
 public class WinningLotto extends Lotto {
   
     private final BonusBall bonusBall;
-
     // 오류가 발생한다.
     public WinningLotto(List<Integer> lottoNumbers, BonusBall bonusBall) {
         super(lottoNumbers);
         this.bonusBall = bonusBall;
     }
-
     // 오류가 발생한다.
     public long compare(Lotto lotto) {
         return lottoNumbers.stream()
@@ -115,13 +107,12 @@ add() 메소드는 Stack의 규칙을 따르지 않기 때문이다. 원래 Stac
 
 ### 조합은 상속의 문제점을 어떻게 해결할까?
 
-조합은 클래스의 인스턴스를 새로운 클래스의 private 필드로 참조하고, 인스턴스의 메소드를 호출하는 방식으로 구현한다.
+조합은 private 필드로 기존 클래스의 인스턴스를 참조하고, 인스턴스의 메소드를 호출하는 방식으로 구현한다.
   
 위에서 보았던 `WinningLotto` 클래스가 `Lotto`를 상속하는 것이 아닌 조합(Composition)을 사용하면 다음과 같다.
 
 ```java
 public class WinningLotto {
-
     private Lotto lotto;
     private BonusBall bonusBall;
 }  
@@ -138,24 +129,17 @@ public class WinningLotto {
   
 ### 상속과 조합은 언제 써야할까?
 
-**상속의 목적**
-
-1. 서브타이핑 - 다형적인 계층구조 구현(부모와 자식 행동이 호환)
-2. 서브클래싱 - 다른 클래스의 코드를 재사용(부모와 자식 행동이 호환 x)
-
-이 두가지의 서로 다른 **상속**의 차이는 부모 클래스의 행동과 자식 클래스의 행동의 호환여부이다. 두 객체가 서로 **Is-A** 관계이거나 클라이언트 관점에서 두 객체가 동일한 행동을 할 것이라 기대될 때 상속을 고려한다.
+두 객체가 서로 **Is-A** 관계이거나 클라이언트 관점에서 두 객체가 동일한 행동을 할 것이라 기대될 때 상속을 고려한다.
 
 ![img4](https://github.com/dilmah0203/TIL/blob/main/Image/Inheritance.png)
   
-위처럼 Is-A 관계일 때 상속을 고려한다. 포유류가 동물이라는 사실은 변할 가능성이 거의 없고, 포유류가 숨을쉬고 새끼를 낳는다는 행동 역시 변할 가능성은 거의 없다. 
+위처럼 **Is-A** 관계일 때 **상속**을 고려한다. 포유류가 동물이라는 사실은 변할 가능성이 거의 없고, 포유류가 숨을쉬고 새끼를 낳는다는 행동 역시 변할 가능성은 거의 없다. 
 
 ```java
 public class 포유류 extends 동물 {
-
     protected void 숨을쉬다() {
         ...
     }
-
     protected void 새끼를낳다() {
         ...
     }
@@ -163,13 +147,4 @@ public class 포유류 extends 동물 {
 ```
   
 반면 **조합**은 **Has-A** 관계이다. 객체가 변경되더라도 영향을 최소화할 수 있기 때문에 변경에 안정적이며 느슨하게 결합되므로 설계가 유연해진다.
-
-<br>
-
-참고
-
-[우아한Tech 상속과 조합](https://www.youtube.com/watch?v=U4OSS4jJ9ns)
-  
-[https://tecoble.techcourse.co.kr/post/2020-05-18-inheritance-vs-composition/](https://tecoble.techcourse.co.kr/post/2020-05-18-inheritance-vs-composition/)  
-
 
