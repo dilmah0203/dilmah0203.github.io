@@ -135,7 +135,7 @@ public class WinningLotto {
 
 두 객체가 서로 **Is-A** 관계이거나 클라이언트 관점에서 두 객체가 동일한 행동을 할 것이라 기대될 때 상속을 고려한다.
 
-![img4](https://github.com/dilmah0203/TIL/blob/main/Image/Inheritance.png)
+![img4](/assets/images/Inheritance.png)
   
 위처럼 **Is-A** 관계일 때 **상속**을 고려한다. 포유류가 동물이라는 사실은 변할 가능성이 거의 없고, 포유류가 숨을쉬고 새끼를 낳는다는 행동 역시 변할 가능성은 거의 없다. 
 
