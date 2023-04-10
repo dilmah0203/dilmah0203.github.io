@@ -97,7 +97,7 @@ public class WinningLotto extends Lotto {
 
 상속은 부모 클래스와 강하게 의존하기 때문에 부모 클래스의 캡슐화를 해치고 결합도가 높아진다. 부모 클래스의 구현을 변경하면, 많은 자식 클래스를 모두 변경 해줘야 하기 때문이다. 불필요한 메소드도 상속받는 문제가 있다.
 
-![img](https://github.com/dilmah0203/TIL/blob/main/Image/Stack.png)
+![img](/assets/images/Stack.png)
 
 Stack 클래스는 Vector 클래스를 상속받고 있다.
 
