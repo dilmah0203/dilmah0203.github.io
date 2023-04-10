@@ -101,7 +101,7 @@ public class WinningLotto extends Lotto {
 
 Stack 클래스는 Vector 클래스를 상속받고 있다.
 
-![img2](https://github.com/dilmah0203/TIL/blob/main/Image/StackTest.png) 
+![img2](/assets/images/StackTest.png)
 
 문자열을 저장하는 Stack을 선언 후 Stack에서 지원하는 메소드로 문자열을 넣어주었다. Stack에서 문자열을 꺼내면 마지막에 넣은 문자열이 반환될 것이라고 예상할 수 있다. 하지만 실제 실행 결과는 예상과 다르게 두 번째에 넣은 문자열이 반환된다.
 
