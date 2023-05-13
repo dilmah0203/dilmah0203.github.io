@@ -4,6 +4,8 @@ title : 다중 서버 환경에서 session 불일치 문제와 해결 방법
 excerpt : ""
 ---
 
+## 서버 다중화 환경에서 session 불일치
+
 사용자가 로그인하기 위해 POST 요청을 보내면 서버는 이 요청을 받고 session id를 발급한다. 그리고 session id를 응답 객체에 실어 사용자에게 재전송하고 사용자는 브라우저의
 쿠키 저장소에 session id를 저장해 상태를 유지할 수 있다.
 
@@ -25,3 +27,26 @@ excerpt : ""
 - Sticky Session
 - Session Clustering
 - Session Storage
+
+## Sticky Session
+
+![img3](/assets/images/Sticky%20Session.png)
+
+Sticky Session은 사용자의 세션을 처음 생성한 서버가 해당 사용자의 작업을 담당하여 고정된 세션만 사용한다. 즉 user1이 A 서버에 처음 로그인 요청을 하여 세션을 생성하였다면, 앞으로의 모든 user1의 요청은 A 서버에만 보내지게 된다. 이렇게 특정 사용자의 요청을 하나의 서버로 고정시키기 위해 로드밸런서는 요청을 보낸 사용자의 ip주소나 클라이언트의 요청에 쿠키가 존재하는지 확인 후 작업이 이루어진다. 
+
+결론적으로 Sticky Session방식으로 사용자는 세션이 유지되는 동안 하나의 서버만 사용하게 되므로 세션 불일치 문제가 발생하지 않는다.
+
+**Sticky Session의 단점**
+
+1. **세션 정보를 잃어버릴 수 있다.**
+
+특정 서버에 장애가 발생하면 해당 서버로 요청을 보내는 사용자의 세션 정보를 잃어버릴 수 있기 때문에 해당 서버에 고정된 유저는 다시 로그인해야 하는 문제점이 있다.
+
+2. **특정 서버에 트래픽이 몰릴 수 있다.**
+
+로드밸런서는 여러 서버에 요청을 적절히 분산하여 부하가 특정 서버에 몰리지 않기 위해 사용한다. 하지만 Sticky Session으로 인해 한 서버에 트래픽이 몰리면 로드밸런서의 원래 목적을 달성할 수 없다.
+
+## Session Clustering
+
+![img4](/assets/images/Session%20Clustering.png)
+
