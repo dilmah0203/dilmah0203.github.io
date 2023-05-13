@@ -75,7 +75,7 @@ Session Storage 방식은 독립된 세션 저장소를 구성하여 해당 저�
 
 ![img5](/assets/images/Session%20Storage.png)
 
-Session Storage가 분리되면 서버가 늘어나도 외부 저장소의 정보만 각각의 서버에 입력해 주면 데이터를 읽어올 수 있다. 그렇기 때문에 Sticky Session의 문제점인 특정 서버로 트래픽이 몰리는 문제가 발생하지 않는다. 또한 독립된 저장소에서 세션을 공유하므로 세션이 재설정되어도 세션 저장소의 데이터만 수정하면 되어 WAS 간 불필요한 네트워크 통신 과정을 진행하지 않아도 된다. 저장소로는 MySQL, OracleDB 등 RDBMS과 Redis와 Memcached 같은 In-memory DB를 사용한다.
+Session Storage가 분리되면 서버가 늘어나도 외부 저장소의 정보만 각각의 서버에 입력해 주면 데이터를 읽어올 수 있다. 그렇기 때문에 Sticky Session의 문제점인 특정 서버로 트래픽이 몰리는 문제가 발생하지 않는다. 또한 독립된 저장소에서 세션을 공유하므로 세션이 재설정되어도 세션 저장소의 데이터만 수정하면 되어 WAS 간 불필요한 네트워크 통신 과정을 진행하지 않아도 된다. 저장소로는 MySQL, OracleDB 등 RDBMS나 Redis와 Memcached 같은 In-memory DB를 사용한다.
 
 **Session Storage의 단점**
 
