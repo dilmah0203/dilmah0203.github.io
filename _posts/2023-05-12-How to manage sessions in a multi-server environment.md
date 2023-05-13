@@ -50,7 +50,7 @@ Sticky Session은 사용자의 세션을 처음 생성한 서버가 해당 사�
 
 WAS에 따라서 Session Clustering 방식이 다른데, 스프링 부트의 내장 WAS인 Tomcat의 Session Clustering 방식은 다음과 같다.
 
-![img3](https://github.com/dilmah0203/TIL/blob/main/Image/Session%20Clustering.PNG)
+![img3](/assets/images/Session%20Clustering2.png)
 
 즉 Tomcat은 Session Clustering을 구현하는 방법으로 all-to-all 세션 복제 방식을 사용하며, 해당 방식은 하나의 세션 저장소에 변경이 발생하면 변경된 사항이 다른 모든 세션에 복제된다.
 
