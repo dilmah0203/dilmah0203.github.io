@@ -74,3 +74,13 @@ Session Storage가 분리되면 서버가 늘어나도 외부 저장소의 정�
 **Session Storage의 단점**
 
 하나의 독립된 세션 저장소에서 세션 정보를 저장하고 있기 때문에 해당 저장소가 다운되면 모든 서버가 세션을 공유 받을 수 없게 된다. 그래서 동일한 세션 저장소를 하나 더 구성하여 복제해야 할 필요가 있다.
+
+<br>
+
+참고
+
+https://tomcat.apache.org/tomcat-8.5-doc/cluster-howto.html
+
+https://velog.io/@dailyzett/%EC%84%B8%EC%85%98-%EB%B6%88%EC%9D%BC%EC%B9%98-%EC%8B%9C-%ED%95%B4%EA%B2%B0-%EB%B0%A9%EB%B2%95%EB%93%A4
+
+https://velog.io/@sileeee/%EC%84%B8%EC%85%98-%EB%B6%88%EC%9D%BC%EC%B9%98-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%EB%B0%A9%EB%B2%95
