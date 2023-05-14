@@ -4,7 +4,7 @@ title : 인증 기능은 어떻게 구현할 수 있을까?
 excerpt : ""
 ---
 
-![img](/assets/images/authentication%20vs%20%20authorization.png))
+![img](/assets/images/authentication%20vs%20%20authorization.png)
 
 ## 인증(Authentication)
 
