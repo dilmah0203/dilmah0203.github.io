@@ -22,7 +22,7 @@ excerpt : ""
 
 ## 인증을 어떻게 구현해야 할까?
 
-## 1. Cookie
+### 1. Cookie
 
 - Cookie는 서버에서 사용자 브라우저로 전송하는 작은 데이터로 key : value 형식의 문자열이다.
 - 클라이언트가 웹사이트를 방문할 경우, 해당 웹사이트는 서버는 응답 헤더의 `Set-Cookie`에 담아서 Cookie를 클라이언트의 브라우저로 보낸다. 클라이언트의 브라우저는 Cookie 값을 저장한다.
@@ -47,7 +47,7 @@ excerpt : ""
   3. 클라이언트는 요청을 보낼 때마다 저장된 Cookie를 요청 헤더에 담아 보냄으로써 인증받도록 할 수 있다.
 ![img3](/assets/images/Cookie2.png)
 
-## 2. Cookie & Session
+### 2. Cookie & Session
 
 - Session은 클라이언트의 인증 정보를 Cookie가 아닌 서버에 저장하고 관리한다.
 - Session은 사용자의 주요 정보가 아닌, 단지 사용자를 식별할 수 있는 값을 생성해 Cookie로 주고 받는다.
@@ -68,10 +68,16 @@ excerpt : ""
   - 서버에서 Session을 따로 관리하기 때문에 서버가 여러 개일 경우 로그인 상태 유지에 어려움이 있다.
   - 다중 서버 환경에서 각 서버가 개별적인 Session 저장소를 가질 경우 Session id가 저장되지 않은 곳으로 요청이 가면 클라이언트 식별이 불가능하다.
 
-## 3. JWT(JSON Web Token)
+### 3. JWT(JSON Web Token)
 
 - 인증에 필요한 정보를 암호화시킨 토큰을 의미한다.
 - [JWT TIL](https://github.com/dilmah0203/TIL/blob/main/JWT%20Token.md)
+
+## 인증을 어디에 구현할 것인가?
+
+![img5](/assets/images/Interceptor%20%3A%20filter.png)
+
+- [필터와 인터셉터](https://github.com/dilmah0203/TIL/blob/main/JSP/%ED%95%84%ED%84%B0%20vs%20%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0.md)
 
 <br>
 
