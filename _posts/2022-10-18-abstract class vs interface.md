@@ -36,14 +36,12 @@ public interface 인터페이스이름 {
 
 ```java
 public class Car {
-
     public void method() {
         System.out.println("car method");
     }
 }
   
 public class Main {
-
     public static void main(String[] args) {
     
         Car car = new Car();
@@ -56,14 +54,12 @@ Main 클래스에서 `Car car = new Car();` 과같이 객체를 생성하였다.
 
 ```java
 public class Example {
-
     void auto(Movable m) {
         m.method();
     }
 }
 
 public interface Movable {
-
     public void method();
 }
 
@@ -84,7 +80,6 @@ public class Bus implements Movable {
 }
 
 public class Main {
-
     public static void main(String[] args) {
     
         Example e = new Example();
@@ -202,7 +197,6 @@ public class Example implements Calculator {
 }
 
 public class Main {
-
     public static void main(String[] args) {
     
         Calculator calc = new Example();
