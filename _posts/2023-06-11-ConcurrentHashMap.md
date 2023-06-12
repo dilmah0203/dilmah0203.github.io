@@ -60,6 +60,28 @@ Node는 버킷 안에 저장될 Map 데이터로 필드값으로 key와 value를
 
 CAS 알고리즘은 현재 thread가 가지고 있는 기존값과 메모리가 가지고 있는 값을 비교해 같은 경우 변경할 값을 메모리에 반영하고 true를 반환한다. 다른 경우에는 변경값이 반영되지 않고 false를 반환한 다음 재시도를 하는 방식으로 동작한다.
 
+### get()
+
+`ConcurrentHashMap`에서의 get() 메소드를 살펴보면, synchroized 키워드가 없다. 즉, get()은 가장 최신의 value 값을 return한다.
+
+![img7](/assets/images/ConcurrentHashmap.get().png)
+
+### ConcurrentHashMap 생성자
+
+`ConcurrentHashMap`의 default 생성자를 보면 `initial table size`는 **16**으로 이루어져 있는데 이는 **bucket의 수가 16이고 16개의 thread가 동시 쓰기를 할 수 있다**는 것을 의미한다.
+
+![img8](/assets/images/ConcurrentHashmap2.png)
+
+나머지 생성자의 파라미터는 3가지가 있다.
+
+- **initialCapacity** : 초기 용량을 결정한다.
+- **loadFactor** : 초기 hashTable의 크기를 설정하기 위한 용도로 0.75의 값을 가진다. 
+- **concurrencyLevel** : 동시에 업데이트를 수행하는 예상 thread의 수
+
+**정리**
+
+`ConcurrentHashMap`은 각 bucket lock을 거는 방식이다. 빈 bucket에 Node를 삽입하는 경우 lock을 사용하지 않고 `Compare and Swap`만을 이용한다. 그 외의 업데이트(삽입, 삭제 및 교체)는 lock을 이용하지만 각 bucket의 첫 번째 Node를 기준으로 부분적으로 lock을 획득하여 업데이트 한다.
+
 <br>
 
 참고
