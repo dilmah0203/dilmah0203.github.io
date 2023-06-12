@@ -13,6 +13,31 @@ excerpt: ""
 
 ## ConcurrentHashMap 동작 원리
 
+### HashMap vs ConcurrentHashMap
+
+`HashMap`은 동기화 관련한 코드가 없기 때문에 multi-thread 환경에서 사용한다면 다음과 같이 전체에 lock을 걸어야 한다.
+
 ![img](/assets/images/HashMap.png)
 
-###
+하지만 `ConcurrentHashMap`은 각각의 bucket 별로 동기화를 진행하여 다른 bucket에 속해 있을 경우, 별도의 lock이 없다.
+
+![img2](/assets/images/ConcurrentHashmap.png)
+
+### put()
+
+Map에 원소를 넣는 put(key, value)를 호출하면 `ConcurrentHashMap` 내부적으로 `putVal(key, value, onlyIfAbsent)`로 연결된다.
+
+![img3](/assets/images/ConcurrentHashmap_put()1.png)
+![img4](/assets/images/ConcurrentHashmap_put()2.png)
+
+이제 `putVal()` 메소드를 살펴보자.
+
+
+
+
+
+<br>
+
+참고
+
+[https://www.baeldung.com/java-synchronizedmap-vs-concurrenthashmap](https://www.baeldung.com/java-synchronizedmap-vs-concurrenthashmap)
