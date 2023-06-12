@@ -32,9 +32,33 @@ Map에 원소를 넣는 put(key, value)를 호출하면 `ConcurrentHashMap` 내�
 
 이제 `putVal()` 메소드를 살펴보자.
 
+**1. 빈 bucket에 Node를 삽입하는 경우 `Compare and Swap`을 이용하여 lock을 사용하지 않고 새로운 노드를 bucket에 삽입한다.**
+
+Node는 버킷 안에 저장될 Map 데이터로 필드값으로 key와 value를 가지고 있다. key는 final로 선언되어 한 번 초기화되면 수정이 불가능하다.
+
+![img4](/assets/images/ConcurrentHashmap_put()3.png)
+
+1. table은 ConcurrentHashMap에서 내부적으로 관리하는 Node의 가변 배열로, 무한 loop를 통해 삽입될 bucket을 확인한다.
+2. 새로운 Node를 삽입하기 위해, `tabAt()`을 통해 해당 bucket을 가져오고 `bucket == null`로 비어있는지 확인한다.
+3. bucket이 비어있는 경우 `casTabAt()`을 통해 Node를 담고 있는 volatile 변수에 접근하고 Node와 기대값 `null`을 비교하여 같으면 Node를 생성해 넣고, 아니면 1번으로 돌아가 재시도 한다.
+
+**2. 이미 bucket에 Node가 존재하는 경우 `synchronized`를 이용해 하나의 thread만 접근할 수 있도록 제어한다. 서로 다른 thread가 같은 bucket에 접근할 때만 해당 block이 잠기게 된다.**
+
+![img5](/assets/images/ConcurrentHashmap.put()4.png)
+![img6](/assets/images/ConcurrentHashmap.put()5.png)
+
+1. f는 비어있지 않은 Node<K,V> 타입의 bucket을 의미하고 이것을 통해 동기화 한다.
+2. 같은 key값이 들어올 경우 새로운 Node로 교체한다. 
+3. 해시 충돌인 경우에는 Separate Chaining에 추가하거나, Tree에 추가한다.
+4. bucket의 수(binCount)에 따라 Linked List로 운용할지 Tree로 운용할지 정한다.
+
+3,4는 HashMap의 내부 구현과 같으며
+
+- bucket의 크기가 TREEIFY_THRESHOLD = 8 값보다 큰 경우 Linked List 대신 Tree로 바뀐다.
+- bucket의 크기가 UNTREEIFY_THRESHOLD = 6 보다 작아지면 Tree 대신 다시 Linked List로 바뀐다.
 
 
-
+CAS 알고리즘은 현재 thread가 가지고 있는 기존값과 메모리가 가지고 있는 값을 비교해 같은 경우 변경할 값을 메모리에 반영하고 true를 반환한다. 다른 경우에는 변경값이 반영되지 않고 false를 반환한 다음 재시도를 하는 방식으로 동작한다.
 
 <br>
 
