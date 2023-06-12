@@ -87,3 +87,5 @@ CAS 알고리즘은 현재 thread가 가지고 있는 기존값과 메모리가 
 참고
 
 [https://www.baeldung.com/java-synchronizedmap-vs-concurrenthashmap](https://www.baeldung.com/java-synchronizedmap-vs-concurrenthashmap)
+
+[https://pplenty.tistory.com/17](https://pplenty.tistory.com/17)
