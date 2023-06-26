@@ -71,11 +71,17 @@ excerpt : ""
 ### 3. JWT(JSON Web Token)
 
 - 인증에 필요한 정보를 암호화시킨 토큰을 의미한다.
-- [JWT TIL](https://github.com/dilmah0203/TIL/blob/main/JWT%20Token.md)
+- [JWT(JSON Web Token)란?](https://github.com/dilmah0203/TIL/blob/main/Network/JWT%20Token.md)
 
 ## 인증을 어디에 구현할 것인가?
 
 ![img5](/assets/images/Interceptor%20%3A%20filter.png)
+
+Interceptor와 Filter는 Controllor에 request가 도착하기 이전에 로직을 수행하거나 사용자에게 response가 전달되기 이전에 로직을 처리할 수 있도록 돕는다. 차이가 있다면 Interceptor는 Spring Context에 존재하고 Filter는 Web Context에 존재해 **실행되는 시점**이 다르다.
+
+조금 더 자세하게는 Interceptor의 경우 Controller 처리 이전(preHandle), Controller 처리 이후(postHandle), View 렌더링 이후(afterCompletion)에 로직이 수행되는 반면 Filter의 경우 Spring 영역의 Dispatcher Servlet에 요청에 도착하기 이전과 response가 Dispatcher Servlet을 떠난 이후에 실행된다.
+
+이러한 차이 때문에 사용하는 용도에 차이가 있다. Interceptor의 경우 특정 요청에만 전/후 로직이 필요할 경우 혹은 입/출력 데이터를 가공할 때 사용하고, 모든 요청에 로직이 필요한 경우 혹은 request/response header와 같은 매개변수를 수정해야 할 때 Filter를 주로 사용한다.
 
 - [필터와 인터셉터](https://github.com/dilmah0203/TIL/blob/main/JSP/%ED%95%84%ED%84%B0%20vs%20%EC%9D%B8%ED%84%B0%EC%85%89%ED%84%B0.md)
 
