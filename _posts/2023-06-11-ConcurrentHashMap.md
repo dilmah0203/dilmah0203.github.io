@@ -80,9 +80,11 @@ CAS 알고리즘은 현재 thread가 가지고 있는 기존값과 메모리가 
 
 <br>
 
-**정리**
+### 정리
 
-`ConcurrentHashMap`은 각 bucket에 lock을 거는 방식이다. 빈 bucket에 Node를 삽입하는 경우 lock을 사용하지 않고 `Compare and Swap`만을 이용하여 새로운 Node를 해시 bucket에 삽입하여 원자성을 보장한다. 그 외의 업데이트(삽입, 삭제 및 교체)는 lock을 이용하지만 각 bucket의 첫 번째 Node를 기준으로 부분적으로 lock을 획득하여 업데이트 한다.
+- ConcurrentHashMap은 각 bucket에 lock을 거는 방식을 사용한다.
+- 빈 bucket에 Node를 삽입하는 경우 lock을 사용하지 않고 `Compare and Swap`만을 이용하여 새로운 Node를 해시 bucket에 삽입하여 원자성을 보장한다.
+- 그 외의 업데이트(삽입, 삭제 및 교체)는 lock을 이용하지만 각 bucket의 첫 번째 Node를 기준으로 부분적으로 lock을 획득하여 업데이트 한다.
 
 <br>
 
