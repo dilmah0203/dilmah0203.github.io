@@ -168,7 +168,7 @@ public class Triangle extends Shape {
 }
 ```
 
-추상클래스는 상위 클래스의 상태를 변경할 수 있다. 그리고 인터페이스와 다르게 추상 클래스는 **Is a** 관계일 때 사용한다.
+추상클래스를 상속하는 하위 클래스는 상태를 변경할 수 있다. 그리고 인터페이스와 다르게 추상 클래스는 **Is a** 관계일 때 사용한다.
 
 - Rectangle is a Shape
 - Triangle is a Shape  
