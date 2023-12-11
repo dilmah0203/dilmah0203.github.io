@@ -57,6 +57,7 @@ public class WinningLotto extends Lotto {
 public class Lotto {
   
     protected int[] lottoNumbers;
+
     public Lotto(int[] lottoNumbers) {
         this.lottoNumbers = lottoNumbers;
     }
@@ -141,6 +142,7 @@ public class WinningLotto {
 
 ```java
 public class 포유류 extends 동물 {
+
     protected void 숨을쉬다() {
         ...
     }
