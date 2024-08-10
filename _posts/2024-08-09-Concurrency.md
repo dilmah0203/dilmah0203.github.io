@@ -45,10 +45,50 @@ Lettuce와 Redisson과 같은 Redis 클라이언트를 사용하여 분산 락�
 - Lettuce
   - 기본적으로 스핀락을 사용하여 분산 락을 구현합니다. 
   - 스핀락 방식은 락을 획득하기 위해 계속해서 시도하는 방식으로, 락을 기다리는 동안 CPU 자원을 사용하게 됩니다.
-  - 락을 획득할 때, Redis의 SET 명령어와 NX 옵션을 사용하여 락을 획득합니다. 만약 락이 이미 획득된 상태라면 null 또는 실패 상태를 반환합니다.
+ 
+아래와 같이 사용할 수 있습니다.
+
+```java
+void doProcess() {
+    String lockKey = "lock";
+
+    try {
+        while (!tryLock(lockKey)) { // (2)
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        
+        // (3) do process
+    } finally {
+        unlock(lockKey); // (4)
+    }
+}
+
+boolean tryLock(String key) {
+    return command.setnx(key, "1"); // (1)
+}
+
+void unlock(String key) {
+    command.del(key);
+}
+```
+
+(1) tryLock 메소드는 Redis의 SETNX 명령어를 사용하여 락을 시도합니다. SETNX는 "SET if Not Exists"의 약자로, Redis에서 특정 키가 존재하지 않을 경우에만 값을 설정합니다. 만약 키가 이미 존재하면 락을 획득하지 못한 것으로 간주하여 실패를 반환합니다.
+(2) tryLock이 false를 반환하면, 즉 락을 획득하지 못하면, Thread.sleep(50)을 통해 일정 시간 대기합니다. 이후 다시 tryLock을 호출하여 락을 획득할 수 있을 때까지 반복합니다. 이 과정은 '스핀락'이라고 불립니다.
+(3) 락을 성공적으로 획득한 후에는 프로세스를 수행합니다. 
+(4) 프로세스가 끝난 후에는 unlock 메소드를 호출하여 Redis에서 락을 해제합니다.
+unlock 메소드는 Redis에서 키를 삭제하여 락을 해제합니다. 
+
+
 - Redission
   - 스핀락 방식이 아닌 pub/sub 기능을 이용하여 락을 관리합니다. 
-  
+
+```java
+```
+
 ## 정리
 
 만약 여러 서버가 하나의 DB를 공유하고 있는 경우 낙관적 락이나 비관적 락을 통해 충분히 동시성 문제를 해결할 수 있다. 하지만 분산 DB 환경에서는 낙관적 락이나 비관적 락으로는 동시성 문제를 완전히 해결하기 어렵기 때문에 분산 락을 사용해야 한다.
