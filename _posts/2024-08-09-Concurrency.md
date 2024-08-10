@@ -117,6 +117,8 @@ Redisson의 프로세스는 다음과 같습니다.
 - **Lettuce**는 **스핀락**을 사용하여 락을 획득하며, 무한루프와 높은 CPU 부하가 발생할 수 있습니다.
 - **Redisson**은 **pub/sub** 기능을 이용하여 락을 관리하며, **타임아웃**을 설정할 수 있어 **무한 루프** 문제를 해결합니다.
 
+<br>
+
 참고
 
 [https://hyperconnect.github.io/2019/11/15/redis-distributed-lock-1.html](https://hyperconnect.github.io/2019/11/15/redis-distributed-lock-1.html)
