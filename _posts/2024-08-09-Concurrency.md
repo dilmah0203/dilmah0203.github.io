@@ -89,7 +89,7 @@ void unlock(String key) {
 
 Redisson은 tryLock 메소드에 타임아웃을 명시하도록 되어있습니다. 
 
-![img](https://github.com/mistyblue0302/TIL/blob/main/Image/redission.png)
+![img](https://github.com/mistyblue0302/mistyblue0302.github.io/blob/master/assets/images/redission.png)
 
 - waitTime : 락을 얻기 위한 대기 시간
 - leaseTime : 락이 만료되어 사라지는 시간 지정
