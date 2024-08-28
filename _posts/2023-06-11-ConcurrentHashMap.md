@@ -10,6 +10,18 @@ excerpt: ""
 
 그래서 일부에만 lock을 걸어 운용하는 ConcurrentHashMap이 등장했고 thread-safe한 다른 Map Collection보다 성능이 좋다. 그렇다면 ConcurrentHashMap은 어떻게 구현되어 있을까?
 
+### ConcurrentHashMap 생성자
+
+`ConcurrentHashMap`의 default 생성자를 보면 `initial table size`는 **16**으로 이루어져 있는데 이는 **bucket의 수가 16이고 16개의 thread가 동시 쓰기를 할 수 있다**는 것을 의미한다.
+
+![img8](/assets/images/ConcurrentHashmap2.png)
+
+나머지 생성자의 파라미터는 3가지가 있다.
+
+- **initialCapacity** : 해시 맵의 초기 용량을 결정한다.
+- **loadFactor** : 해시 테이블의 크기를 설정하기 위한 용도로 0.75의 값을 가진다. 테이블의 크기가 75%에 도달할 때 버킷의 수를 동적으로 늘리기 시작한다.
+- **concurrencyLevel** : 동시에 업데이트를 수행하는 예상 thread의 수
+
 ## ConcurrentHashMap 동작 원리
 
 ### HashMap vs ConcurrentHashMap
@@ -58,18 +70,6 @@ Node는 bucket 안에 저장될 Map 데이터로 필드값으로 key와 value를
 `ConcurrentHashMap`에서의 get() 메소드를 살펴보면, synchroized 키워드가 없어도 최신의 value 값을 return할 수 있다.
 
 ![img7](/assets/images/ConcurrentHashmap.get().png)
-
-### ConcurrentHashMap 생성자
-
-`ConcurrentHashMap`의 default 생성자를 보면 `initial table size`는 **16**으로 이루어져 있는데 이는 **bucket의 수가 16이고 16개의 thread가 동시 쓰기를 할 수 있다**는 것을 의미한다.
-
-![img8](/assets/images/ConcurrentHashmap2.png)
-
-나머지 생성자의 파라미터는 3가지가 있다.
-
-- **initialCapacity** : 해시 맵의 초기 용량을 결정한다.
-- **loadFactor** : 해시 테이블의 크기를 설정하기 위한 용도로 0.75의 값을 가진다. 테이블의 크기가 75%에 도달할 때 버킷의 수를 동적으로 늘리기 시작한다.
-- **concurrencyLevel** : 동시에 업데이트를 수행하는 예상 thread의 수
 
 <br>
 
