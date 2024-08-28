@@ -37,30 +37,25 @@ Node는 bucket 안에 저장될 Map 데이터로 필드값으로 key와 value를
 
 ![img4](/assets/images/ConcurrentHashmap_put()3.png)
 
-1. table은 ConcurrentHashMap에서 내부적으로 관리하는 Node 객체를 관리하는 가변 배열로, table 배열이 비어있으면 initTable() 메소드를 통해 초기화한다.
-2. 새로운 Node를 삽입하기 위해, `tabAt()`을 통해 해당 bucket을 가져오고 `bucket == null`로 비어있는지 확인한다.
-3. bucket이 비어있는 경우 `casTabAt()` 메소드를 사용하여 Compare-And-Swap(CAS) 연산을 통해 새로운 Node를 bucket에 넣는다.
+- table은 ConcurrentHashMap에서 내부적으로 관리하는 Node 객체를 관리하는 가변 배열로, table 배열이 비어있으면 initTable() 메소드를 통해 초기화한다.
+- 새로운 Node를 삽입하기 위해, tabAt()을 통해 해당 bucket을 가져오고 bucket == null로 비어있는지 확인한다.
+- bucket이 비어있는 경우 casTabAt() 메소드를 사용하여 Compare-And-Swap(CAS) 연산을 통해 새로운 Node를 bucket에 넣는다.
 
 **2. 이미 bucket에 Node가 존재하는 경우 `synchronized`를 이용해 하나의 thread만 접근할 수 있도록 제어한다. 서로 다른 thread가 같은 bucket에 접근할 때만 해당 block이 잠기게 된다.**
 
 ![img5](/assets/images/ConcurrentHashmap.put()4.png)
 ![img6](/assets/images/ConcurrentHashmap.put()5.png)
 
-1. f는 비어있지 않은 Node<K,V> 타입의 bucket을 의미하고 이것을 통해 동기화 한다.
-2. 같은 key값이 들어올 경우 새로운 Node로 교체한다. 
-3. 해시 충돌인 경우에는 Separate Chaining에 추가하거나, Tree에 추가한다.
-4. bucket의 수(binCount)에 따라 Linked List로 운용할지 Tree로 운용할지 정한다.
+- 같은 key값이 들어올 경우 기존 Node를 새로운 Node로 교체한다. 
+- 해시 충돌이 발생하면 Separate Chaining 방식으로 Node를 추가하거나, 특정 조건에 따라 Tree로 변환한다.
+  - bucket의 크기가 TREEIFY_THRESHOLD = 8 값보다 큰 경우 Linked List 대신 Tree로 바뀐다.
+  - bucket의 크기가 UNTREEIFY_THRESHOLD = 6 보다 작아지면 Tree 대신 다시 Linked List로 바뀐다.
 
-3,4는 HashMap의 내부 구현과 동일하다.
-
-- bucket의 크기가 TREEIFY_THRESHOLD = 8 값보다 큰 경우 Linked List 대신 Tree로 바뀐다.
-- bucket의 크기가 UNTREEIFY_THRESHOLD = 6 보다 작아지면 Tree 대신 다시 Linked List로 바뀐다.
-
-CAS 알고리즘은 현재 thread가 가지고 있는 기존값과 메모리가 가지고 있는 값을 비교해 같으면 변경할 값을 메모리에 반영하고, true를 반환한다. 다를 경우 변경값이 반영되지 않고 false를 반환한 다음 재시도를 하는 방식으로 동작한다.
+**CAS 알고리**즘은 현재 thread가 가지고 있는 기존값과 메모리가 가지고 있는 값을 비교해 같으면 변경할 값을 메모리에 반영하고, true를 반환한다. 다를 경우 변경값이 반영되지 않고 false를 반환한 다음 재시도를 하는 방식으로 동작한다.
 
 ### get()
 
-`ConcurrentHashMap`에서의 get() 메소드를 살펴보면, synchroized 키워드가 없다. 즉, get()은 가장 최신의 value 값을 return한다.
+`ConcurrentHashMap`에서의 get() 메소드를 살펴보면, synchroized 키워드가 없어도 최신의 value 값을 return할 수 있다.
 
 ![img7](/assets/images/ConcurrentHashmap.get().png)
 
@@ -72,8 +67,8 @@ CAS 알고리즘은 현재 thread가 가지고 있는 기존값과 메모리가 
 
 나머지 생성자의 파라미터는 3가지가 있다.
 
-- **initialCapacity** : 초기 용량을 결정한다.
-- **loadFactor** : 초기 hashTable의 크기를 설정하기 위한 용도로 0.75의 값을 가진다. 
+- **initialCapacity** : 해시 맵의 초기 용량을 결정한다.
+- **loadFactor** : 해시 테이블의 크기를 설정하기 위한 용도로 0.75의 값을 가진다. 테이블의 크기가 75%에 도달할 때 버킷의 수를 동적으로 늘리기 시작한다.
 - **concurrencyLevel** : 동시에 업데이트를 수행하는 예상 thread의 수
 
 <br>
