@@ -76,8 +76,8 @@ Node는 bucket 안에 저장될 Map 데이터로 필드값으로 key와 value를
 ### 정리
 
 - ConcurrentHashMap은 각 bucket에 lock을 거는 방식을 사용한다.
-- 빈 bucket에 Node를 삽입하는 경우 lock을 사용하지 않고 `Compare and Swap`만을 이용하여 새로운 Node를 해시 bucket에 삽입하여 원자성을 보장한다.
-- 그 외의 업데이트(삽입, 삭제 및 교체)는 lock을 이용하지만 각 bucket의 첫 번째 Node를 기준으로 부분적으로 lock을 획득하여 업데이트 한다.
+- 빈 bucket에 Node를 삽입하는 경우 lock을 사용하지 않고 `Compare and Swap`알고리즘을 사용한다.
+- bucket에 이미 Node가 존재하는 경우, 그 외의 업데이트(삽입, 삭제 및 교체)는 synchronized를 이용하여 동기화한다.
 
 <br>
 
