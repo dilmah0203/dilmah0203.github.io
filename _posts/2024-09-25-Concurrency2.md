@@ -10,6 +10,8 @@ excerpt: ""
 
 - 두 명의 배달 기사가 동시에 배달 요청된 주문을 수락합니다.
 - 주문 상태가 DELIVERY_REQUESTED인 상태에서 두 배달 기사가 동시에 접근하면, 중복 배차 문제가 발생할 수 있습니다.
+  
+<br>
 
 ![img](/assets/images/Concurrent.png)
 
