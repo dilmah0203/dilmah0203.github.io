@@ -112,7 +112,7 @@ public class DistributedLockAop {
 
 **락의 해제 시점이 트랜잭션 커밋 시점보다 빠르면 데이터 정합성이 깨질 수 있습니다.** 예를 들어, 트랜잭션이 커밋되기 전에 락이 해제되면 다른 트랜잭션이 동시에 접근할 수 있게 되어, 데이터의 정합성이 유지되지 않을 수 있습니다. 따라서 트랜잭션 커밋이 완료된 후에 락을 해제함으로써 데이터 정합성을 보장할 수 있습니다.
 
-`lock() 메소드`를 자세히 살펴보겠습니다.
+`lock()` 메소드를 자세히 살펴보겠습니다.
 
 ~~~java
 @Around("@annotation(com.project.food_ordering_service.global.annotaion.DistributedLock)")
