@@ -28,3 +28,86 @@ excerpt: ""
     - 저희가 선택한 방식은 Redis를 이용한 분산 락입니다. Lettuce로 분산 락을 사용하기 위해서는 `setnx`, `setex` 등을 이용해 분산 락을 직접 구현해야 합니다. 개발자가 직접 retry, timeout과 같은 기능을 구현해주어야 하는 번거로움이 있습니다. 이에 비해 Redission은 별도의 Lock interface를 지원합니다.
     - Lettuce는 분산락 구현 시 `setnx`, `setex`과 같은 명령어를 이용해 지속적으로 Redis에게 락이 해제되었는지 요청을 보내는 스핀락 방식으로 동작하기 때문에 요청이 많을수록 redis의 부하는 커지게 됩니다.
     - 이에 비해 `Redisson`은 Pub/Sub 방식을 이용하여 락이 해제되면 락을 기다리던 쓰레드들은 락이 해제되었다는 신호를 받고 락 획득을 시도합니다.
+
+~~~java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface DistributedLock {
+    String key();
+    TimeUnit timeUnit() default TimeUnit.SECONDS;
+    long waitTime() default 5L;
+    long leaseTime() default 3L;
+}
+~~~
+
+@DistributedLock은 특정 메소드에 분산 락을 적용하기 위해 정의된 커스텀 어노테이션으로 이 어노테이션을 통해 락의 키, 시간 단위, 대기 시간, 유지 시간등을 지정합니다.
+
+~~~java
+@Component
+public class AopTransactionExecutor {
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Object proceed(final ProceedingJoinPoint joinPoint) throws Throwable {
+        return joinPoint.proceed();
+    }
+}
+~~~
+
+Redisson을 사용해 Redis 분산 락을 관리하고, AopTransactionExecutor 클래스를 사용해 트랜잭션을 처리하고 메소드를 실행합니다. 
+
+~~~java
+@Aspect
+@Component
+@RequiredArgsConstructor
+public class DistributedLockAop {
+
+    private final RedissonClient redissonClient;
+    private final AopTransactionExecutor aopTransactionExecutor;
+    
+    private static final String REDISSON_LOCK_PREFIX = "LOCK:";
+
+    @Around("@annotation(com.project.food_ordering_service.global.annotaion.DistributedLock)")
+    public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
+        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+        DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
+
+        String key = buildLockKey(distributedLock, joinPoint);
+        RLock rLock = redissonClient.getLock(key); // (1)
+
+        try {
+            boolean available = rLock.tryLock(distributedLock.waitTime(),
+                    distributedLock.leaseTime(), distributedLock.timeUnit()); // (2)
+            if (!available) {
+                return false;
+            }
+            return aopTransactionExecutor.proceed(joinPoint); // (3)
+        } catch (InterruptedException e) {
+            throw new InterruptedException();
+        } finally {
+            rLock.unlock(); // (4)
+        }
+    }
+
+    private String buildLockKey(DistributedLock distributedLock, ProceedingJoinPoint joinPoint) {
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Object dynamicKey = DynamicValueParser.getDynamicValue(methodSignature.getParameterNames(),
+                joinPoint.getArgs(), distributedLock.key());
+        return REDISSON_LOCK_PREFIX + dynamicKey;
+    }
+}
+~~~
+
+@DistributedLock 애노테이션 선언 시 수행되는 aop 클래스입니다. @DistributedLock 애노테이션의 파라미터 값을 가져와 분산락 획득을 시도하고 애노테이션이 선언된 메소드를 실행합니다.
+
+1. 락의 이름으로 RLock 인스턴스를 가져옵니다.
+2. 정의된 waitTime까지 락 획득을 시도하고 leaseTime이 지나면 락을 해제합니다.
+3. DistributedLock 애노테이션이 선언된 메소드를 별도의 트랜잭션으로 실행합니다.
+4. 종료시 무조건 락을 해제합니다.
+
+@DistributedLock 이 선언된 메소드는 Propagation.REQUIRES_NEW 옵션을 지정해 별도의 트랜잭션으로 동작합니다. 그리고 반드시 **트랜잭션 커밋 이후 락이 해제됩니다.**
+
+> 왜 트랜잭션 커밋 이후 락이 해제되어야 할까?
+
+**락의 해제 시점이 트랜잭션 커밋 시점보다 빠르면 데이터 정합성이 깨질 수 있습니다.** 예를 들어, 트랜잭션이 커밋되기 전에 락이 해제되면 다른 트랜잭션이 동시에 접근할 수 있게 되어, 데이터의 정합성이 유지되지 않을 수 있습니다. 따라서 트랜잭션 커밋이 완료된 후에 락을 해제함으로써 데이터 정합성을 보장할 수 있습니다.
+
+lock() 메소드를 자세히 살펴보겠습니다.
