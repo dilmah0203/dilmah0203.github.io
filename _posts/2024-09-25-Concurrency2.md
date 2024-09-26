@@ -111,3 +111,62 @@ public class DistributedLockAop {
 **락의 해제 시점이 트랜잭션 커밋 시점보다 빠르면 데이터 정합성이 깨질 수 있습니다.** 예를 들어, 트랜잭션이 커밋되기 전에 락이 해제되면 다른 트랜잭션이 동시에 접근할 수 있게 되어, 데이터의 정합성이 유지되지 않을 수 있습니다. 따라서 트랜잭션 커밋이 완료된 후에 락을 해제함으로써 데이터 정합성을 보장할 수 있습니다.
 
 `lock() 메소드`를 자세히 살펴보겠습니다.
+
+~~~java
+@Around("@annotation(com.project.food_ordering_service.global.annotaion.DistributedLock)")
+public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
+    Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+    DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
+    
+    String key = buildLockKey(distributedLock, joinPoint);
+		RLock rLock = redissonClient.getLock(key);
+		
+    try {
+        boolean available = rLock.tryLock(distributedLock.waitTime(),
+                distributedLock.leaseTime(), distributedLock.timeUnit());
+        if (!available) {
+            return false;
+        }
+        return aopTransactionExecutor.proceed(joinPoint);
+    } catch (InterruptedException e) {
+        throw new InterruptedException();
+    } finally {
+        rLock.unlock();
+    }
+}
+~~~
+
+- @Around : 이 애노테이션을 통해 `@DistributedLock`이 붙은 메소드에 대해 `lock() 메소드`를 적용하도록 설정합니다.
+- ProceedingJoinPoint joinPoint : AOP에서 메소드 호출 대상 객체에 대한 정보를 담고 있는 객체로 `joinPoint.proceed()`가 호출되면 타겟 메소드를 실행할 수 있습니다.
+- MethodSignature : 현재 호출된 메소드 정보를 가져올 수 있는 객체로 실제 메소드와 메타데이터(애노테이션)에 접근할 수 있습니다. `method.getAnnotation()`을 통해 메소드에 붙어있는 `@DistributedLock` 애노테이션을 가져와 락을 설정할 때 사용할 정보를 알 수 있습니다.
+- buildLockKey() 메소드에 넘겨진 파라미터를 분석해서 Redis에 저장될 락의 키를 생성합니다. 이 키는 분산 락을 구분하는데 사용됩니다.
+- Redission의 RLock은 Redis에서 분산 락을 관리하는 객체로 `getLock(key)`를 통해 Redis의 특정 키에 대한 락을 가져옵니다. 락이 존재하지 않으면 새로운 락을 만듭니다.
+- tryLock() : 락을 걸 때 사용되는 메소드로 앞에서 설정했던 **시간 단위,** **대기 시간, 유지 시간 정보**를 이용합니다. waitTime동안 락이 풀리기를 기다리며, 락을 획득하면 leaseTime 동안 유지됩니다.
+- 락 획득 실패시 false를 반환해 메소드 실행을 하지 않고, 락을 성공적으로 획득하면 `aopTransactionExecutor.proceed()`가 호출되어 원래의 메소드를 실행합니다. 이 메소드는 @Transactional(propagation = Propagation.REQUIRES_NEW)으로 설정된 별도의 트랜잭션에서 실행됩니다.
+- finally 블록에서 락을 해제합니다. 메소드 실행이 완료되면 무조건 락이 해제되도록 보장합니다. 이는 락을 획득한 후 실행 중에 예외가 발생하더라도 락이 적절히 해제되도록 하기 위함입니다.
+
+아래는 배달 할당 과정에서 분산락이 적용된 코드입니다.
+
+~~~java
+@Service
+@RequiredArgsConstructor
+public class DeliveryService {
+
+    private final DeliveryRepository deliveryRepository;
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+
+    @Transactional
+    @DistributedLock(key = "#orderId")
+    public Delivery assignDelivery(Long orderId, Long riderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CustomException(ErrorInformation.ORDER_NOT_FOUND));
+        ...
+    }
+}  
+~~~
+
+`@DistributedLock` 애노테이션이 달린 `assignDelivery()` 메소드가 호출되면 @Around 어드바이스가 실행되어 분산 락을 설정합니다. REDISSON_LOCK_PREFIX와 `@DistributedLock` 애노테이션에서 지정한 key 및 메소드의 인자값을 기반으로 락의 키를 생성합니다. 이 키는 Redis에 저장된 락을 구분하는 데 사용됩니다.
+
+RedissonClient를 사용하여 Redis에서 RLock 객체를 가져옵니다. `rLock.tryLock()` 메소드를 호출하여 락을 시도합니다. 락을 성공적으로 획득하면 `aopTransactionExecutor.proceed(joinPoint)`를 호출하여, 메소드를 실행합니다. AopTransactionExecutor는 @Transactional(propagation = Propagation.REQUIRES_NEW)로 설정되어 있어, 새로운 트랜잭션을 시작하고 메소드를 실행합니다. 
+`assignDelivery()` 메소드가 실행된 후, finally 블록에서 `rLock.unlock()`을 호출하여 락을 해제합니다. 이는 메소드 실행이 완료된 후 락이 반드시 해제되도록 보장합니다. 예외가 발생하더라도 락은 적절히 해제됩니다.
