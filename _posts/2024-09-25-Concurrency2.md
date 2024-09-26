@@ -170,5 +170,8 @@ public class DeliveryService {
 
 `@DistributedLock` 애노테이션이 달린 `assignDelivery()` 메소드가 호출되면 @Around 어드바이스가 실행되어 분산 락을 설정합니다. REDISSON_LOCK_PREFIX와 `@DistributedLock` 애노테이션에서 지정한 key 및 메소드의 인자값을 기반으로 락의 키를 생성합니다. 이 키는 Redis에 저장된 락을 구분하는 데 사용됩니다.
 
-RedissonClient를 사용하여 Redis에서 RLock 객체를 가져옵니다. `rLock.tryLock()` 메소드를 호출하여 락을 시도합니다. 락을 성공적으로 획득하면 `aopTransactionExecutor.proceed(joinPoint)`를 호출하여, 메소드를 실행합니다. AopTransactionExecutor는 @Transactional(propagation = Propagation.REQUIRES_NEW)로 설정되어 있어, 새로운 트랜잭션을 시작하고 메소드를 실행합니다. 
-`assignDelivery()` 메소드가 실행된 후, finally 블록에서 `rLock.unlock()`을 호출하여 락을 해제합니다. 이는 메소드 실행이 완료된 후 락이 반드시 해제되도록 보장합니다. 예외가 발생하더라도 락은 적절히 해제됩니다.
+- RedissonClient를 사용하여 Redis에서 RLock 객체를 가져옵니다.
+- `rLock.tryLock()` 메소드를 호출하여 락을 시도합니다.
+- 락을 성공적으로 획득하면 `aopTransactionExecutor.proceed(joinPoint)`를 호출하여, 메소드를 실행합니다.
+- AopTransactionExecutor는 @Transactional(propagation = Propagation.REQUIRES_NEW)로 설정되어 있어, 새로운 트랜잭션을 시작하고 메소드를 실행합니다.
+- `assignDelivery()` 메소드가 실행된 후, finally 블록에서 `rLock.unlock()`을 호출하여 락을 해제합니다. 이는 메소드 실행이 완료된 후 락이 반드시 해제되도록 보장합니다. 예외가 발생하더라도 락은 적절히 해제됩니다.
