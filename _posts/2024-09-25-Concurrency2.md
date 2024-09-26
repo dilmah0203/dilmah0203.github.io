@@ -138,7 +138,7 @@ public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
 }
 ~~~
 
-- @Around : 이 애노테이션을 통해 `@DistributedLock`이 붙은 메소드에 대해 `lock() 메소드`를 적용하도록 설정합니다.
+- @Around 애노테이션을 통해 `@DistributedLock`이 붙은 메소드에 대해 `lock() 메소드`를 적용하도록 설정합니다.
 - ProceedingJoinPoint joinPoint : AOP에서 메소드 호출 대상 객체에 대한 정보를 담고 있는 객체로 `joinPoint.proceed()`가 호출되면 타겟 메소드를 실행할 수 있습니다.
 - MethodSignature : 현재 호출된 메소드 정보를 가져올 수 있는 객체로 실제 메소드와 메타데이터(애노테이션)에 접근할 수 있습니다. `method.getAnnotation()`을 통해 메소드에 붙어있는 `@DistributedLock` 애노테이션을 가져와 락을 설정할 때 사용할 정보를 알 수 있습니다.
 - buildLockKey() 메소드에 넘겨진 파라미터를 분석해서 Redis에 저장될 락의 키를 생성합니다. 이 키는 분산 락을 구분하는데 사용됩니다.
