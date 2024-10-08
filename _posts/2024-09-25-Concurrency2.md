@@ -121,7 +121,7 @@ public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
     DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
     
     String key = buildLockKey(distributedLock, joinPoint);
-RLock rLock = redissonClient.getLock(key);
+    RLock rLock = redissonClient.getLock(key);
 		
     try {
         boolean available = rLock.tryLock(distributedLock.waitTime(),
