@@ -125,6 +125,4 @@ Redisson의 프로세스는 다음과 같습니다.
 
 참고
 
-[https://hyperconnect.github.io/2019/11/15/redis-distributed-lock-1.html](https://hyperconnect.github.io/2019/11/15/redis-distributed-lock-1.html)
-
 [https://helloworld.kurly.com/blog/distributed-redisson-lock/#3-%EB%B6%84%EC%82%B0%EB%9D%BD%EC%9D%84-%EB%B3%B4%EB%8B%A4-%EC%86%90%EC%89%BD%EA%B2%8C-%EC%82%AC%EC%9A%A9%ED%95%A0-%EC%88%98%EB%8A%94-%EC%97%86%EC%9D%84%EA%B9%8C](https://helloworld.kurly.com/blog/distributed-redisson-lock/#3-%EB%B6%84%EC%82%B0%EB%9D%BD%EC%9D%84-%EB%B3%B4%EB%8B%A4-%EC%86%90%EC%89%BD%EA%B2%8C-%EC%82%AC%EC%9A%A9%ED%95%A0-%EC%88%98%EB%8A%94-%EC%97%86%EC%9D%84%EA%B9%8C)
