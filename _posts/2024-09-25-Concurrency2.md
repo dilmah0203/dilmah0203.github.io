@@ -18,17 +18,41 @@ excerpt: ""
 ## 문제 해결 방법
 
 - **낙관적 락**
-    - 버전 정보를 이용하여 데이터를 읽을 때는 락을 걸지 않고, 데이터를 업데이트할 때만 충돌을 감지하는 방식입니다. 낙관적 락은 데이터 충돌이 발생할 경우 예외 처리를 직접 구현해야 하기 때문에 추가적인 코드 작성이 필요합니다. 만약 동시에 접근하는 트랜잭션이 많아져 충돌이 자주 발생하면 재시도 횟수에 따라 DB I/O가 발생해 부하가 증가합니다.
+    - 버전 정보를 이용하여 데이터를 읽을 때는 락을 걸지 않고, 트랜잭션 커밋 시점에 데이터 충돌 여부를 확인하는 방식입니다. 낙관적 락은 데이터 충돌이 발생할 경우 예외 처리를 직접 구현해야 하기 때문에 추가적인 코드 작성이 필요합니다. 만약 수정에 대한 요청이 많을 경우 버전이 일치하지 않아 데이터가 정상적으로 반영되지 않는 상황이 발생할 수 있습니다.
 - **비관적 락**
-    - 데이터를 읽을 때부터 해당 데이터에 대한 락을 걸어 다른 트랜잭션이 해당 데이터를 변경할 수 없게 합니다. 하지만 이는 성능 저하를 유발할 수 있으며, 락이 해제될 때까지 다른 트랜잭션은 대기해야 합니다.
+    - 데이터를 읽을 때부터 해당 데이터에 대한 락을 걸어 다른 트랜잭션이 해당 데이터를 변경할 수 없게 합니다. 하지만 모든 트랜잭션이 락을 얻을 때까지 대기 상태에 있기 때문에 성능 저하가 발생할 수 있습니다.
  
-낙관적 락과 비관적 락을 비교한 결과, 라이더가 동시에 하나 이상의 배달을 수락하지 못하도록 보장하면서 데이터의 정합성을 유지하려면 비관적 락을 사용하는 것이 더 적합하다고
-판단하였습니다. 현재는 단일 서버 환경이지만, 확장 가능성을 고려하여 분산 서버 환경에서도 데이터 일관성을 유지할 수 있도록 Redis를 활용한 분산 락을 구현하기로 하였습니다. 
+낙관적 락과 비관적 락을 비교한 결과, 라이더가 동시에 하나 이상의 배달을 수락하지 못하도록 보장하면서 데이터의 정합성을 유지하기 위해서는 비관적 락이 더 적합하다고 판단하였습니다. 현재는 단일 서버 환경이지만, 향후 확장 가능성을 고려하여 분산 서버 환경에서도 데이터 일관성을 유지할 수 있도록 Redis를 활용한 분산 락을 구현하기로 하였습니다.
 
 - **분산 락**
     - 저희가 선택한 방식은 Redis를 이용한 분산 락입니다. Lettuce로 분산 락을 사용하기 위해서는 `setnx`, `setex` 등을 이용해 분산 락을 직접 구현해야 합니다. 개발자가 직접 retry, timeout과 같은 기능을 구현해주어야 하는 번거로움이 있습니다. 이에 비해 Redission은 별도의 Lock interface(RLock)를 지원합니다.
     - Lettuce는 분산락 구현 시 `setnx`, `setex`과 같은 명령어를 이용해 지속적으로 Redis에게 락이 해제되었는지 요청을 보내는 스핀락 방식으로 동작하기 때문에 요청이 많을수록 Redis의 부하는 커지게 됩니다.
     - 이에 비해 `Redisson`은 Pub/Sub 방식을 이용하여 락이 해제되면 락을 기다리던 쓰레드들은 락이 해제되었다는 신호를 받고 락 획득을 시도합니다.
+
+~~~java
+@Configuration
+public class RedissonConfig {
+
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.data.redis.port}")
+    private int redisPort;
+
+    private static final String REDISSON_HOST_PREFIX = "redis://";
+
+    @Bean
+    public RedissonClient redissonClient() {
+        RedissonClient redisson = null;
+        Config config = new Config();
+        config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + redisHost + ":" + redisPort);
+        redisson = Redisson.create(config);
+        return redisson;
+    }
+}
+~~~
+
+`Redisson`을 사용하기 위해 Config 설정을 빈으로 등록합니다. 
 
 ~~~java
 @Target(ElementType.METHOD)
@@ -42,19 +66,6 @@ public @interface DistributedLock {
 ~~~
 
 `@DistributedLock`은 특정 메소드에 분산 락을 적용하기 위해 정의된 커스텀 어노테이션으로 이 어노테이션을 통해 락의 키, 시간 단위, 대기 시간, 유지 시간등을 지정합니다.
-
-~~~java
-@Component
-public class AopTransactionExecutor {
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Object proceed(final ProceedingJoinPoint joinPoint) throws Throwable {
-        return joinPoint.proceed();
-    }
-}
-~~~
-
-`Redisson`을 사용해 Redis 분산 락을 관리하고, `AopTransactionExecutor` 클래스를 사용해 트랜잭션을 처리하고 메소드를 실행합니다. 
 
 ~~~java
 @Aspect
@@ -104,6 +115,17 @@ public class DistributedLockAop {
 2. 정의된 waitTime까지 락 획득을 시도하고 leaseTime이 지나면 락을 해제합니다.
 3. DistributedLock 애노테이션이 선언된 메소드를 별도의 트랜잭션으로 실행합니다.
 4. 종료시 무조건 락을 해제합니다.
+
+~~~java
+@Component
+public class AopTransactionExecutor {
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Object proceed(final ProceedingJoinPoint joinPoint) throws Throwable {
+        return joinPoint.proceed();
+    }
+}
+~~~
 
 `@DistributedLock`이 선언된 메소드는 Propagation.REQUIRES_NEW 옵션을 지정해 별도의 트랜잭션으로 동작합니다. 그리고 반드시 **트랜잭션 커밋 이후 락이 해제됩니다.**
 
