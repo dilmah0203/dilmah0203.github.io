@@ -130,7 +130,7 @@ public class WinningLotto {
 - 메소드를 호출하는 방식으로 동작하기 때문에 캡슐화를 깨뜨리지 않는다.
 - Lotto 클래스 같은 기존 클래스의 변화에 영향이 적어지며 안전하다.
   
-메소드 호출 방식이기 때문이 `Lotto` 클래스의 인스턴스 변수인 `List<Integer> lottoNumbers`가 `int[] lottoNumbers`로 바뀌어도 영향을 받지 않게 된다. 그저 메서드 호출을 통한 값을 사용하면 될 뿐이다.
+메소드 호출 방식이기 때문에 `Lotto` 클래스의 인스턴스 변수인 `List<Integer> lottoNumbers`가 `int[] lottoNumbers`로 바뀌어도 영향을 받지 않게 된다. 그저 메서드 호출을 통한 값을 사용하면 될 뿐이다.
   
 ## 상속과 조합은 언제 써야할까?
 
