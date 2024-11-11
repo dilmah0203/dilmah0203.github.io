@@ -12,3 +12,15 @@ Java의 가비지 컬렉터(Garbage Collector)는 다양한 종류가 있지만 
 초기 Java는 가비지 컬렉션(GC) 과정이 애플리케이션 코드와 독립적으로 수행하도록 설계되었습니다. 하지만 객체를 다양한 방법으로 처리하기 위해 JDK 1.2부터 `java.lang.ref` 패키지가 도입되어 사용자 코드와 GC와의 제한적인 상호작용을 할 수 있게 하고 있습니다.
 
 Java의 기본 참조 유형인 strong reference 외에도 `java.lang.ref` 패키지는 `soft`, `weak`, `phantom` 3가지의 새로운 참조 방식을 각각의 Reference 클래스로 제공합니다. 이 3가지 Reference 클래스를 사용함으로써 GC에 일정 부분 관여할 수 있습니다.
+
+<br>
+
+## GC의 Reachability
+
+GC는 객체가 가비지인지 판별하기 위해 reachability라는 개념을 사용합니다. 어떤 객체에 유효한 참조가 있다면 reachable, 없으면 unreachable로 구별하고 unreachable한 객체를 가비지로 간주 및 GC를 수행합니다. 하나의 객체는 여러 다른 객체를 참조하고, 참조된 다른 객체들도 또 다른 객체들을 참조할 수 있으므로 객체는 참조 사슬을 이룹니다. Root Space은 항상 유효한 최초의 참조로, Root Space에서 시작해 객체가 참조 가능한지 여부를 검사합니다.
+
+JVM의 Runtime Data Area의 구조를 보면 다음과 같습니다.
+
+![img](https://github.com/mistyblue0302/mistyblue0302.github.io/blob/master/assets/images/Reference.png)
+
+Runtime Data Area는 쓰레드가 차지하는 영역과 객체를 생성 및 저장하는 Heap, 클래스 정보를 저장하는 Method Area로 크게 세 부분으로 나눌 수 있습니다. 위 구조에서 참조는 화살표로 표시되어 있습니다.
