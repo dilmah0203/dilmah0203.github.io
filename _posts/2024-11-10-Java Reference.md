@@ -47,6 +47,8 @@ Root Space로부터 시작한 참조에 속한 객체들은 `reachable` 객체�
 
 참고
 
+[https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/package-summary.html](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ref/package-summary.html)
+
 [https://d2.naver.com/helloworld/329631](https://d2.naver.com/helloworld/329631)
 
 
