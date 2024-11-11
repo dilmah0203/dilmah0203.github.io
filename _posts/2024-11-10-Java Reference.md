@@ -24,3 +24,21 @@ JVM의 Runtime Data Area의 구조를 보면 다음과 같습니다.
 ![img](https://github.com/mistyblue0302/mistyblue0302.github.io/blob/master/assets/images/Reference.png)
 
 Runtime Data Area는 쓰레드가 차지하는 영역과 객체를 생성 및 저장하는 Heap, 클래스 정보를 저장하는 Method Area로 크게 세 부분으로 나눌 수 있습니다. 위 구조에서 참조는 화살표로 표시되어 있습니다.
+
+Heap의 객체 참조 방식은 다음 네 가지 종류로 나눌 수 있습니다.
+
+- Heap 내의 다른 객체에 의한 참조
+- Java 스택의 참조(Java 메소드 실행 시 사용하는 로컬 변수나 파라미터들에 의한 참조)
+- 네이티브 스택의 참조
+- Method Area의 정적 변수에 의한 참조
+
+이것들 중 Heap 내의 다른 객체에 의한 참조를 제외한 나머지 3개가
+
+
+
+
+
+
+
+
+
