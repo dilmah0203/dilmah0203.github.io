@@ -6,17 +6,6 @@ excerpt: ""
 
 Java의 가비지 컬렉터(Garbage Collector)는 다양한 종류가 있지만 다음과 같은 작업을 공통적으로 수행합니다.
 
-1. Heap 내의 객체 중에서 더 이상 필요 없게 된 객체를 찾아낸다.
-2. 찾아낸 객체를 처리하여 Heap의 메모리를 회수한다.
-
-초기 Java는 가비지 컬렉션(GC) 작업이---
-layout: single
-title: Java의 Reference와 GC
-excerpt: ""
----
-
-Java의 가비지 컬렉터(Garbage Collector)는 다양한 종류가 있지만 다음과 같은 작업을 공통적으로 수행합니다.
-
 - Heap 내의 객체 중에서 더 이상 필요 없게 된 객체를 찾아낸다.
 - 찾아낸 객체를 처리하여 Heap의 메모리를 회수한다.
 
