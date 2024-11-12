@@ -17,7 +17,7 @@ Java의 기본 참조 유형인 `strong reference` 외에도 `java.lang.ref` 패
 
 ## GC의 Reachability
 
-GC는 객체가 가비지인지 판별하기 위해 `reachability`라는 개념을 사용합니다. 어떤 객체에 유효한 참조가 있다면 `reachable`, 없으면 `unreachable`로 구별하고 `unreachable`한 객체를 가비지로 간주 및 GC를 수행합니다. 하나의 객체는 여러 다른 객체를 참조하고, 참조된 다른 객체들도 또 다른 객체들을 참조할 수 있으므로 객체는 참조 사슬을 이룹니다. Root Space은 항상 유효한 최초의 참조로, Root Space에서 시작해 객체가 참조 가능한지 여부를 검사합니다.
+GC는 객체가 가비지인지 판별하기 위해 `reachability`라는 개념을 사용합니다. 어떤 객체에 유효한 참조가 있다면 `reachable`, 없으면 `unreachable`로 구별하고 `unreachable`한 객체를 가비지로 간주 및 GC를 수행합니다. 하나의 객체는 여러 다른 객체를 참조하고, 참조된 다른 객체들도 또 다른 객체들을 참조할 수 있으므로 객체는 참조 사슬을 이룹니다. 여기서 Root Space은 항상 유효한 최초의 참조로, Root Space에서 시작해 객체가 참조 가능한지 여부를 검사합니다.
 
 JVM의 Runtime Data Area의 구조를 보면 다음과 같습니다.
 
