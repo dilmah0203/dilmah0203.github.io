@@ -21,7 +21,7 @@ GC는 객체가 가비지인지 판별하기 위해 `reachability`라는 개념�
 
 JVM의 Runtime Data Area의 구조를 보면 다음과 같습니다.
 
-![img](https://github.com/mistyblue0302/mistyblue0302.github.io/blob/master/assets/images/Reference.png)
+![img](/assets/images/Reference.png)
 
 Runtime Data Area는 쓰레드가 차지하는 영역과 객체를 생성 및 저장하는 Heap, 클래스 정보를 저장하는 Method Area로 크게 세 부분으로 나눌 수 있습니다. 위 구조에서 참조는 화살표로 표시되어 있습니다.
 
@@ -34,7 +34,7 @@ Heap의 객체 참조 방식은 다음 네 가지 종류로 나눌 수 있습니
 
 이것들 중 Heap 내의 다른 객체에 의한 참조를 제외한 나머지 3개가 Root Space로 `reachability` 여부를 결정하는 기준이 됩니다. 
 
-![img](https://github.com/mistyblue0302/mistyblue0302.github.io/blob/master/assets/images/Reference2.png)
+![img](/assets/images/Reference2.png)
 
 Root Space로부터 시작한 참조에 속한 객체들은 `reachable` 객체이고, 이 참조 사슬과 무관한 객체들은 `unreachable` 객체로 GC 대상이 됩니다. 만약 오른쪽 아래처럼 `reachable` 객체를 참조하더라도, 다른 `reachable` 객체가 이 객체를 참조하지 않는다면 `unreachable` 객체가 됩니다.
 
