@@ -53,6 +53,7 @@ ex = null;
 위 코드의 동작 방식은 다음과 같습니다.
 
 `WeakReference` 객체는 `new Sample()`로 생성된 `Sample` 객체를 캡슐화한 객체입니다. 참조된 `Sample` 객체는 `wr.get()`을 통해 다른 참조를 통해 연결되고 이때 `WeakReference` 객체의 참조와 `ex` 참조, 두 개의 참조가 처음 생성한 `Sample` 객체를 가리킵니다.
+
 ![img](/assets/images/Reference3.png)
 
 코드 마지막 줄에서 `ex = null;`이 실행되면 처음에 생성한 `Sample` 객체는 오직 `WeakReference` 내부에서만 참조되고 이 객체를 `weakly reachable` 객체라고 합니다.
