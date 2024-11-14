@@ -40,9 +40,9 @@ Root Space로부터 시작한 참조에 속한 객체들은 `reachable` 객체�
 
 ## Soft, Weak, Phantom Reference
 
-`java.lang.ref` 패키지는 `soft reference`, `weak reference`, `phantom reference`를 클래스 형태로 제공하여 `java.lang.ref.WeakReference` 클래스는 객체를 캡슐화한 WeakReference 객체를 생성합니다. 이렇게 생성된 객체는 다른 객체와 달리 GC가 특별하게 처리할 수 있게 합니다.
+`java.lang.ref` 패키지는 `soft reference`, `weak reference`, `phantom reference`를 클래스 형태로 제공하여 `java.lang.ref.WeakReference` 클래스는 객체를 캡슐화한 `WeakReference` 객체를 생성합니다. 이렇게 생성된 객체는 다른 객체와 달리 GC가 특별하게 처리할 수 있게 합니다.
 
-아래는 WeakReference 클래스가 객체를 생성하는 예시입니다.
+아래는 `WeakReference` 클래스가 객체를 생성하는 예시입니다.
 
 ~~~java
 WeakReference<Sample> wr = new WeakReference<Sample>(new Sample());  
@@ -56,9 +56,25 @@ ex = null;
 
 ![img](/assets/images/Reference3.png)
 
-코드 마지막 줄에서 `ex = null;`이 실행되면 처음에 생성한 `Sample` 객체는 오직 `WeakReference` 내부에서만 참조되고 이 객체를 `weakly reachable` 객체라고 합니다.
+코드 마지막 줄에서 `ex = null;`이 실행되면 처음에 생성한 `Sample` 객체는 오직 `WeakReference` 내부에서만 참조되고 이 객체는 `weakly reachable` 객체가 됩니다.
 
 ![img](/assets/images/Reference4.png)
+
+## java.lang.ref 패키지
+
+원래 GC 대상 여부를 확인할 때는 `reachable`, `unreachable` 인가로만 구분하고 사용자 코드에서는 관여할 수 없었습니다. 하지만 `java.lang.ref` 패키지를 이용하여 `reachable` 객체들을 `strongly reachable`, `softly reachable`, `weakly reachable`, `phantomly reachable`로 더 자세히 구별하여 GC 때의 동작을 다르게 지정할 수 있습니다. 요약하여 GC 대상 여부를 판별할 때 사용자 코드도 관여할 수 있게 되었습니다. 위 그림에서 몇몇 객체들을 `WeakReference`로 바꾸면 아래와 같습니다.
+
+![img](/assets/images/Reference5.png)
+
+녹색으로 표시된 두 객체는 `WeakReference`로만 참조된 `weakly reachable` 객체이고, 파란색 객체는 `strongly reachable` 객체입니다. GC가 동작하면 `unreachable` 객체뿐만 아니라 `weakly reachable` 객체도 가비지 객체로 간주되어 메모리에서 회수됩니다. Root Space로부터 시작된 참조 사슬에 포함이 되어있는데도 불구하고 GC가 동작할 때 메모리가 회수되기 때문에 참조는 가능하지만 항상 유효할 필요는 없는 LRU 캐시와 같은 임시 객체를 저장하는 구조를 쉽게 만들 수 있습니다. LRU 캐시는 자주 사용한 객체는 계속 보관하고 덜 사용한 객체는 제거하는 방식으로, 약한 참조를 통해 LRU 캐시를 구성하면 더 이상 사용되지 않는 객체는 자동으로 메모리에서 제거되기 때문에 메모리 사용을 최적화할 수 있습니다.
+
+위 그림에서 `WeakReference` 객체 자체는 `weakly reachable` 객체가 아니라 `strongly reachable` 객체입니다. 또한, 그림에서 A로 표시된 객체와 같이 `WeakReference`에 의해 참조되고 있으면서 동시에 Root Space에서 시작한 참조 사슬에 포함되어 있는 경우에는 `weakly reachable` 객체가 아니라 `strongly reachable` 객체입니다.
+
+GC가 동작하여 어떤 객체를 `weakly reachable` 객체로 판단하면, GC는 `WeakReference` 객체에 있는 `weakly reachable` 객체에 대한 참조를 null로 설정하여 `unreachable` 객체와 마찬가지인 상태로, 메모리 회수 대상이 됩니다.
+
+## Strengths of Reachability
+
+`reachability`는 총 다섯가지 종류가 있고 이는 GC가 객체를 처리하는 기준이 됩니다. 또한 하나의 객체는 `strong reference`, `soft reference`, `weak reference`, `phantom reference`의 다양한 조합으로 참조될 수 있습니다.
 
 <br>
 
