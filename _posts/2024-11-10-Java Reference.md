@@ -88,6 +88,114 @@ GC가 동작하여 어떤 객체를 `weakly reachable` 객체로 판단하면, G
 
 위의 경우 객체 B의 `reachability`는 `softly reachable`입니다. Root Space로부터 바로 `SoftReference`를 통해 B를 참조할 수 있기 때문입니다. 만약 SoftReference 참조가 없다면 객체 B는 `phantomly reachable`이 됩니다.
 
+## Strong References
+
+~~~java
+public class ClassStrong {
+
+    public static class Referred {
+        protected void finalize() {
+            System.out.println("method : finalize");
+        }
+    }
+
+    public static void collect() throws InterruptedException {
+        System.out.println("Suggesting collection");
+        System.gc();
+        System.out.println("Sleeping");
+        Thread.sleep(5000);
+    }
+
+    public static void main(String args[]) throws InterruptedException {
+        System.out.println("Creating strong references");
+        Referred strong = new Referred();
+
+        ClassStrong.collect();
+
+        System.out.println("Removing reference");
+        strong = null;
+        ClassStrong.collect();
+
+        System.out.println("Done");
+    }
+}
+~~~
+
+~~~java
+Creating strong references
+Suggesting collection
+Sleeping
+Removing reference
+Suggesting collection
+Sleeping
+method : finalize
+Done
+~~~
+
+`finalize()` 메소드는 객체가 GC에 의해 수거될 때 호출되는 메소드로 강한 참조가 유지될 때는 해당 메소드가 호출되지 않습니다. 하지만 이후에 `strong = null;`로 강한 참조를 제거한 후 `System.gc()`를 호출하면 `finalize()` 메소드가 호출되면서 객체가 수거됩니다.
+
+## Soft references
+
+이 경우 JVM은 메모리가 부족할 때만 GC에 의해 수거되도록 합니다.
+
+~~~java
+public class ClassSoft {
+
+    public static class Referred {
+        protected void finalize() {
+            System.out.println("method : finalize");
+        }
+    }
+
+    public static void collect() throws InterruptedException {
+        System.out.println("Suggesting collection");
+        System.gc();
+        System.out.println("Sleeping");
+        Thread.sleep(5000);
+    }
+
+    public static void main(String args[]) throws InterruptedException {
+        System.out.println("Creating soft references");
+        Referred strong = new Referred();
+
+        SoftReference<Referred> soft = new SoftReference<Referred>(strong);
+
+        ClassSoft.collect();
+
+        System.out.println("Removing reference");
+        strong = null;
+        ClassSoft.collect();
+
+        System.out.println("Consuming heap");
+        try {
+            List<ClassSoft> heap = new ArrayList<ClassSoft>(100000);
+            while (true) {
+                heap.add(new ClassSoft());
+            }
+        } catch (OutOfMemoryError e) {
+            System.out.println("Out of memory error raised");
+        }
+        System.out.println("Done");
+    }
+}
+~~~
+
+~~~java
+Creating soft references
+Suggesting collection
+Sleeping
+Removing reference
+Suggesting collection
+Sleeping
+Consuming heap
+method : finalize
+Out of memory error raised
+Done
+~~~
+
+## Weak references
+
+## Phantom references
 
 
 <br>
@@ -98,5 +206,4 @@ GC가 동작하여 어떤 객체를 `weakly reachable` 객체로 판단하면, G
 
 [https://d2.naver.com/helloworld/329631](https://d2.naver.com/helloworld/329631)
 
-[https://tourspace.tistory.com/42](https://tourspace.tistory.com/42)
-
+[http://neverfear.org/blog/view/150/Strong_Soft_Weak_and_Phantom_References_Java](http://neverfear.org/blog/view/150/Strong_Soft_Weak_and_Phantom_References_Java)
