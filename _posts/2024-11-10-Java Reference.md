@@ -195,6 +195,51 @@ Done
 
 ## Weak references
 
+명시적으로 weak reference를 사용함으로써 해당객체가 GC 되도록 유도할 수 있습니다.
+
+~~~java
+public class ClassWeak {
+    public static class Referred {
+        protected void finalize() {
+            System.out.println("method : finalize");
+        }
+    }
+
+    public static void collect() throws InterruptedException {
+        System.out.println("Suggesting collection");
+        System.gc();
+        System.out.println("Sleeping");
+        Thread.sleep(5000);
+    }
+
+    public static void main(String args[]) throws InterruptedException {
+        System.out.println("Creating weak references");
+        Referred strong = new Referred();
+
+        WeakReference<Referred> weak = new WeakReference<Referred>(strong);
+
+        ClassWeak.collect();
+
+        System.out.println("Removing reference");
+        strong = null;
+        ClassWeak.collect();
+
+        System.out.println("Done");
+    }
+}
+~~~
+
+~~~java
+Creating weak references
+Suggesting collection
+Sleeping
+Removing reference
+Suggesting collection
+Sleeping
+method : finalize
+Done
+~~~
+
 ## Phantom references
 
 
